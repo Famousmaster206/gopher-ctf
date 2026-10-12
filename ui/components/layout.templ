@@ -9,7 +9,17 @@ templ Layout(title string) {
 			<title>{ title } | {shared.Config.Name}</title>
 			<script src="https://unpkg.com/htmx.org@1.9.10"></script>
 			<link rel="stylesheet" href="/static/css/style.css?v=1.0.1"/>
-		</head>
+		    <script>
+            // HTMX does not swap error responses by default. Keep form feedback visible.
+            document.addEventListener('htmx:beforeSwap', function (event) {
+                const target = event.detail.target;
+                if (target && ['flag-result', 'upload-result'].includes(target.id)) {
+                    event.detail.shouldSwap = true;
+                    event.detail.isError = false;
+                }
+            });
+        </script>
+        </head>
 		<body hx-boost="true">
 			@Nav()
 			<main>

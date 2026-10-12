@@ -66,8 +66,8 @@ func RegisterHandler(c *gin.Context) {
 
 func ScoreboardHandler(c *gin.Context) {
 	var users []models.User
-	if err := shared.DB.Order("score desc").Find(&users).Error; err != nil {
-		c.String(200, "Database error")
+	if err := shared.DB.Order("score desc").Order("id asc").Find(&users).Error; err != nil {
+		c.String(500, "Database error")
 		return
 	}
 	if c.GetHeader("HX-Request") == "true" {

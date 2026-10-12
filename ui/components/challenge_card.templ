@@ -14,7 +14,8 @@ templ ChallengeCard(c models.Challenge) {
 				<span>flag</span>
 				<input type="text" name="flag" placeholder="flag{...}" required/>
 			</label>
-			<button type="submit" hx-post={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/submit" } hx-target="main">Submit</button>
+			<button type="submit" hx-post={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/submit" } hx-target="#flag-result">Submit</button>
 		</form>
+        <div id="flag-result" class="panel__result" role="status" aria-live="polite"></div>
 	</div>
 }
