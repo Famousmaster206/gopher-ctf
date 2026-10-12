@@ -8,9 +8,13 @@ package pages
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "github.com/openlyfree/gopher-ctf/ui/components"
+import (
+	"github.com/openlyfree/gopher-ctf/internal/models"
+	"github.com/openlyfree/gopher-ctf/ui/components"
+	"strconv"
+)
 
-func Admin() templ.Component {
+func Admin(users []models.User) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -43,13 +47,124 @@ func Admin() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"admin\"><div class=\"admin__header\"><h2>uhh if ur not supposed to be here please leave, thank you :D</h2><!-- final and strongest defense --></div><div class=\"admin__grid\"><section class=\"admin__card\"><div class=\"admin__card-header\"><h3>Add challenge</h3></div><form class=\"admin__form\" hx-post=\"/secret-candy-vault/challenge\" hx-target=\"#upload-result\" enctype=\"multipart/form-data\"><label class=\"admin__field\"><span>files</span> <input type=\"file\" name=\"challenge_files\" accept=\".tar, .tar.gz, application/x-tar, application/gzip\" placeholder=\" i like tar files\"></label> <label class=\"admin__field\"><span>name</span> <input type=\"text\" name=\"challenge_name\" placeholder=\"challenge name\" required></label><p class=\"admin__hint\">no funky symbols in the name btw.</p><label class=\"admin__field\"><span>description</span> <input type=\"text\" name=\"challenge_description\" placeholder=\"description\" required></label> <label class=\"admin__field\"><span>points</span> <input type=\"number\" name=\"challenge_points\" placeholder=\"challenge points\" required></label> <label class=\"admin__field\"><span>flag(include header)</span> <input type=\"text\" name=\"challenge_flag\" placeholder=\"flag{this_is_a_flag}\" required></label> <button type=\"submit\">Upload challenge</button></form><div id=\"upload-result\" class=\"admin__result\"></div></section><section class=\"admin__card admin__card--compact\"><div class=\"admin__card-header\"><h2>Reload config</h2><p>Refresh the app configuration after updating environment-backed values.</p></div><form class=\"admin__actions\" hx-post=\"/secret-candy-vault/reload-config\" hx-target=\"#reload-result\"><button type=\"submit\">Reload config</button></form><div id=\"reload-result\" class=\"admin__result\"></div></section></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"admin\"><div class=\"admin__header\"><h2>uhh if ur not supposed to be here please leave, thank you :D</h2><!-- final and strongest defense --></div><section class=\"admin__card\"><h3>candy check</h3><p>ask for their name + points code. match them here, then check their points :D</p>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = AdminPlayers(users).Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</section><div class=\"admin__grid\"><section class=\"admin__card\"><div class=\"admin__card-header\"><h3>Add challenge</h3></div><form class=\"admin__form\" hx-post=\"/secret-candy-vault/challenge\" hx-target=\"#upload-result\" enctype=\"multipart/form-data\"><label class=\"admin__field\"><span>files</span> <input type=\"file\" name=\"challenge_files\" accept=\".tar, .tar.gz, application/x-tar, application/gzip\" placeholder=\" i like tar files\"></label> <label class=\"admin__field\"><span>name</span> <input type=\"text\" name=\"challenge_name\" placeholder=\"challenge name\" required></label><p class=\"admin__hint\">no funky symbols in the name btw.</p><label class=\"admin__field\"><span>description</span> <input type=\"text\" name=\"challenge_description\" placeholder=\"description\" required></label> <label class=\"admin__field\"><span>points</span> <input type=\"number\" name=\"challenge_points\" placeholder=\"challenge points\" required></label> <label class=\"admin__field\"><span>flag(include header)</span> <input type=\"text\" name=\"challenge_flag\" placeholder=\"flag{this_is_a_flag}\" required></label> <button type=\"submit\">Upload challenge</button></form><div id=\"upload-result\" class=\"admin__result\"></div></section><section class=\"admin__card admin__card--compact\"><div class=\"admin__card-header\"><h2>Reload config</h2><p>Refresh the app configuration after updating environment-backed values.</p></div><form class=\"admin__actions\" hx-post=\"/secret-candy-vault/reload-config\" hx-target=\"#reload-result\"><button type=\"submit\">Reload config</button></form><div id=\"reload-result\" class=\"admin__result\"></div></section></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
 		templ_7745c5c3_Err = components.Layout("Admin Dashboard").Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func AdminPlayers(users []models.User) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var3 == nil {
+			templ_7745c5c3_Var3 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div id=\"admin-players\" class=\"scoreboard-table-wrapper\" hx-get=\"/secret-candy-vault/players\" hx-trigger=\"every 10s\" hx-swap=\"outerHTML\"><table class=\"scoreboard-table\"><thead><tr><th>username</th><th>points</th><th>points code</th></tr></thead> <tbody>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		for _, user := range users {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<tr><td>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(user.Username)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/pages/admin.templ`, Line: 78, Col: 28}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</td><td>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var5 string
+			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(user.Score))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/pages/admin.templ`, Line: 78, Col: 65}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</td><td>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if user.VerificationCode != nil {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "<code>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_Var6 string
+				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(*user.VerificationCode)
+				if templ_7745c5c3_Err != nil {
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/pages/admin.templ`, Line: 80, Col: 37}
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</code>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			} else {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<span>old account ? no code</span>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</td></tr>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</tbody></table>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if len(users) == 0 {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<p>no players yet. where's everyone at?</p>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
