@@ -88,10 +88,18 @@ func SubmitFlagHandler(c *gin.Context) {
 		return
 	}
 	if alreadyCompleted {
-		c.String(409, "Already completed!")
+		if c.GetHeader("HX-Request") == "true" {
+			Render(c, 409, components.CompletionFeedback("Already completed!"))
+		} else {
+			c.String(409, "Already completed!")
+		}
 		return
 	}
-	c.String(200, "Correct! +%d points", challenge.Points)
+	if c.GetHeader("HX-Request") == "true" {
+		Render(c, 200, components.CompletionFeedback(fmt.Sprintf("Correct! +%d points", challenge.Points)))
+	} else {
+		c.String(200, "Correct! +%d points", challenge.Points)
+	}
 }
 
 var errInvalidChallengeID = errors.New("invalid challenge ID")
@@ -109,6 +117,7 @@ func GetChallenge(id string) (models.Challenge, error) {
 }
 
 func ChallengeIndividualHandler(c *gin.Context) {
+	c.Header("Cache-Control", "private, no-store")
 	challenge, err := GetChallenge(c.Param("id"))
 	if err != nil {
 		_ = c.Error(err)
@@ -121,10 +130,16 @@ func ChallengeIndividualHandler(c *gin.Context) {
 		}
 		return
 	}
+	completed, err := completedChallenges(c)
+	if err != nil {
+		_ = c.Error(err)
+		c.String(500, "Database error")
+		return
+	}
 	if c.GetHeader("HX-Request") == "true" {
-		Render(c, 200, components.ChallengeCard(challenge))
+		Render(c, 200, components.ChallengeCard(challenge, completed[challenge.ID]))
 	} else {
-		Render(c, 200, pages.ChallengeDetail(challenge))
+		Render(c, 200, pages.ChallengeDetail(challenge, completed[challenge.ID]))
 	}
 }
 
@@ -134,16 +149,23 @@ func Render(c *gin.Context, status int, cmp templ.Component) {
 }
 
 func ChallengeIndexHandler(c *gin.Context) {
+	c.Header("Cache-Control", "private, no-store")
 	var challenges []models.Challenge
 	if err := shared.DB.Find(&challenges).Error; err != nil {
 		_ = c.Error(err)
 		c.String(500, "Database error")
 		return
 	}
+	completed, err := completedChallenges(c)
+	if err != nil {
+		_ = c.Error(err)
+		c.String(500, "Database error")
+		return
+	}
 	if c.GetHeader("HX-Request") == "true" {
-		Render(c, 200, pages.Challenges(challenges))
+		Render(c, 200, pages.Challenges(challenges, completed))
 	} else {
-		Render(c, 200, pages.ChallengesPage(challenges))
+		Render(c, 200, pages.ChallengesPage(challenges, completed))
 	}
 }
 
@@ -218,4 +240,21 @@ func awardChallenge(db *gorm.DB, userID, challengeID uint, points int) (bool, er
 		return nil
 	})
 	return alreadyCompleted, err
+}
+
+// One query loads only this player's completions for the list or detail page.
+func completedChallenges(c *gin.Context) (map[uint]bool, error) {
+	completed := make(map[uint]bool)
+	userID, ok := sessions.Default(c).Get("user_id").(uint)
+	if !ok || userID == 0 {
+		return completed, nil
+	}
+	var ids []uint
+	if err := shared.DB.Model(&models.ChallengeCompletion{}).Where("user_id = ?", userID).Pluck("challenge_id", &ids).Error; err != nil {
+		return nil, err
+	}
+	for _, id := range ids {
+		completed[id] = true
+	}
+	return completed, nil
 }

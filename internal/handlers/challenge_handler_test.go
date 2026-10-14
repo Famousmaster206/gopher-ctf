@@ -21,6 +21,10 @@ import (
 )
 
 func requestFlag(userID uint, id, flag string) *httptest.ResponseRecorder {
+	return requestFlagWithHTMX(userID, id, flag, false)
+}
+
+func requestFlagWithHTMX(userID uint, id, flag string, hx bool) *httptest.ResponseRecorder {
 	r := gin.New()
 	r.Use(sessions.Sessions("test", cookie.NewStore([]byte("test-secret"))))
 	r.Use(func(c *gin.Context) {
@@ -32,6 +36,9 @@ func requestFlag(userID uint, id, flag string) *httptest.ResponseRecorder {
 	r.POST("/challenges/:id/submit", SubmitFlagHandler)
 	req := httptest.NewRequest("POST", "/challenges/"+id+"/submit", strings.NewReader(url.Values{"flag": {flag}}.Encode()))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if hx {
+		req.Header.Set("HX-Request", "true")
+	}
 	w := httptest.NewRecorder()
 	r.ServeHTTP(w, req)
 	return w
@@ -131,9 +138,49 @@ func TestPostgresScoring(t *testing.T) {
 	if err = db.Create(&other).Error; err != nil {
 		t.Fatal(err)
 	}
+	loadUI := func(userID uint, path string, hx bool) *httptest.ResponseRecorder {
+		r := gin.New()
+		r.Use(sessions.Sessions("test", cookie.NewStore([]byte("test-secret"))))
+		r.Use(func(c *gin.Context) {
+			if userID != 0 {
+				sessions.Default(c).Set("user_id", userID)
+			}
+			c.Next()
+		})
+		r.GET("/challenges", ChallengeIndexHandler)
+		r.GET("/challenges/:id", ChallengeIndividualHandler)
+		req := httptest.NewRequest("GET", path, nil)
+		if hx {
+			req.Header.Set("HX-Request", "true")
+		}
+		w := httptest.NewRecorder()
+		r.ServeHTTP(w, req)
+		return w
+	}
+	for _, hx := range []bool{false, true} {
+		for _, tc := range []struct {
+			id        uint
+			completed bool
+		}{{user.ID, true}, {other.ID, false}, {0, false}} {
+			for _, path := range []string{"/challenges", fmt.Sprintf("/challenges/%d", challenge.ID)} {
+				w := loadUI(tc.id, path, hx)
+				if w.Code != 200 || strings.Contains(w.Body.String(), "completed! 🔥") != tc.completed {
+					t.Fatalf("wrong completion for user %d at %s: %d %s", tc.id, path, w.Code, w.Body.String())
+				}
+				if path != "/challenges" && strings.Contains(w.Body.String(), `name="flag"`) == tc.completed {
+					t.Fatal("completed challenges must hide the flag form")
+				}
+				if w.Header().Get("Cache-Control") != "private, no-store" {
+					t.Fatal("completion pages must not be shared in caches")
+				}
+			}
+		}
+	}
 	id := fmt.Sprint(challenge.ID)
-	if w := requestFlag(other.ID, id, " \nflag{x}\t "); w.Code != 200 {
+	if w := requestFlagWithHTMX(other.ID, id, " \nflag{x}\t ", true); w.Code != 200 {
 		t.Fatalf("trimmed success: %d %s", w.Code, w.Body.String())
+	} else if !strings.Contains(w.Body.String(), "completed! 🔥") || !strings.Contains(w.Body.String(), `hx-swap-oob="outerHTML"`) {
+		t.Fatal("correct submission must update the completion badge immediately")
 	}
 	if err = db.First(&other, other.ID).Error; err != nil {
 		t.Fatal(err)

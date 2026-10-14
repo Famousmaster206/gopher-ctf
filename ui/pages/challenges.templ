@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-templ Challenges(challenges []models.Challenge) {
+templ Challenges(challenges []models.Challenge, completed map[uint]bool) {
 	<div class="challenges-container">
 		<div class="challenges-grid">
 			for _, c := range challenges {
@@ -15,7 +15,10 @@ templ Challenges(challenges []models.Challenge) {
 						<h2>{ c.Title }</h2>
 						<span class="challenge-points">{ strconv.Itoa(int(c.Points)) } pts</span>
 					</div>
-					<button class="challenge-btn" hx-get={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-replace-url="true" hx-target="main">View Challenge</button>
+					if completed[c.ID] {
+                        <p class="challenge-completed">completed! 🔥</p>
+                    }
+                    <button class="challenge-btn" hx-get={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-replace-url="true" hx-target="main">View Challenge</button>
 				</div>
 			}
 			if len(challenges) == 0 {
@@ -25,8 +28,8 @@ templ Challenges(challenges []models.Challenge) {
 	</div>
 }
 
-templ ChallengesPage(challenges []models.Challenge) {
+templ ChallengesPage(challenges []models.Challenge, completed map[uint]bool) {
 	@components.Layout("Challenges") {
-		@Challenges(challenges)
+		@Challenges(challenges, completed)
 	}
 }
