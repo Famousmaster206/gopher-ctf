@@ -86,6 +86,7 @@ nav a {
 }
 
 button,
+.challenge-card > .challenge-btn,
 input,
 .admin-nav-button,
 .challenge-filter {
@@ -828,3 +829,7 @@ nav.admin-challenge-list a[aria-current="true"] {
 .login.admin-login { max-width: 420px; gap: 16px; }
 
 .admin.admin--challenge-create { width: min(640px, 100%); }
+
+a.challenge-card { color: var(--primary); text-decoration: none; }
+a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
+.challenge-card > .challenge-btn { display: block; text-align: center; }

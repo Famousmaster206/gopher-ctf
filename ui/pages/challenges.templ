@@ -25,7 +25,7 @@ templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCom
         </div>
 		<div id="challenge-results" class="challenges-grid">
 			for _, c := range challenges {
-				<div class="challenge-card" data-completed={ strconv.FormatBool(completed[c.ID]) }>
+				<a class="challenge-card" data-completed={ strconv.FormatBool(completed[c.ID]) } href={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-get={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-replace-url="true" hx-target="main">
 					<div class="challenge-card-header">
 						<h2 title={ c.Title }>{ c.Title }</h2>
 						<span class="challenge-points">{ strconv.Itoa(int(c.Points)) } pts</span>
@@ -33,8 +33,8 @@ templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCom
 					if completed[c.ID] {
                         <p class="challenge-completed">completed! 🔥</p>
                     }
-                    <button class="challenge-btn" hx-get={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-replace-url="true" hx-target="main">View Challenge</button>
-				</div>
+                    <span class="challenge-btn">View Challenge</span>
+				</a>
 			}
 			if len(challenges) == 0 {
 				if query != "" {
