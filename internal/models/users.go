@@ -11,6 +11,7 @@ type User struct {
 	Password         string `gorm:"not null"`
 	VerificationCode *string
 	LastLoginAttempt *time.Time
+	LastFlagAttempt  *time.Time
 	Score            int `gorm:"default:0"`
 }
 

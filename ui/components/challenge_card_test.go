@@ -11,7 +11,7 @@ import (
 
 func TestFlagFeedbackTarget(t *testing.T) {
 	var html bytes.Buffer
-	if err := ChallengeCard(models.Challenge{Title: "Test"}).Render(context.Background(), &html); err != nil {
+	if err := ChallengeCard(models.Challenge{Title: "Test"}, false).Render(context.Background(), &html); err != nil {
 		t.Fatal(err)
 	}
 	for _, want := range []string{`hx-target="#flag-result"`, `id="flag-result"`, `aria-live="polite"`} {

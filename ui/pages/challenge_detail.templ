@@ -5,8 +5,8 @@ import (
 	"github.com/openlyfree/gopher-ctf/ui/components"
 )
 
-templ ChallengeDetail(c models.Challenge) {
+templ ChallengeDetail(c models.Challenge, completed bool) {
 	@components.Layout("Challenge: " + c.Title) {
-		@components.ChallengeCard(c)
+		@components.ChallengeCard(c, completed)
 	}
 }

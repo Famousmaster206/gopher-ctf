@@ -5,17 +5,33 @@ import (
 	"strconv"
 )
 
-templ ChallengeCard(c models.Challenge) {
+templ ChallengeCard(c models.Challenge, completed bool) {
 	<div class="challenge-detail">
 		<h1>{ c.Title }</h1>
 		<p>{ c.Description }</p>
-		<form class="panel__form">
+		<div id="challenge-status">
+            if completed {
+                <p class="challenge-completed">completed! 🔥</p>
+            }
+        </div>
+        if !completed {
+        <form id="flag-form" class="panel__form">
 			<label class="panel__field">
 				<span>flag</span>
 				<input type="text" name="flag" placeholder="flag{...}" required/>
 			</label>
 			<button type="submit" hx-post={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/submit" } hx-target="#flag-result">Submit</button>
 		</form>
+        }
         <div id="flag-result" class="panel__result" role="status" aria-live="polite"></div>
 	</div>
+}
+
+
+templ CompletionFeedback(message string) {
+ <span>{ message }</span>
+ <div id="challenge-status" hx-swap-oob="outerHTML">
+  <p class="challenge-completed">completed! 🔥</p>
+ </div>
+ <div id="flag-form" hx-swap-oob="outerHTML"></div>
 }
