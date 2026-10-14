@@ -21,6 +21,8 @@ templ Index() {
 			<button hx-get="/register" hx-target="main" hx-replace-url="true" >Join the CTF</button>
 		} else {
 			<h1>Welcome back, { GetUser(ctx) }!</h1>
+			<button hx-get="/challenges" hx-target="main" hx-replace-url="true">View challenges</button>
+			<button hx-get="/scoreboard" hx-target="main" hx-replace-url="true">View scoreboard</button>
 		}
 	}
 }
