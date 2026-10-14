@@ -2,12 +2,15 @@ package internal
 
 import (
 	"context"
+	"errors"
 	"log"
 	"net/http"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"github.com/openlyfree/gopher-ctf/internal/models"
 	"github.com/openlyfree/gopher-ctf/internal/shared"
+	"gorm.io/gorm"
 )
 
 func UserLoader() gin.HandlerFunc {
@@ -17,8 +20,27 @@ func UserLoader() gin.HandlerFunc {
 			Path: "/", MaxAge: 86400 * 30, HttpOnly: true, SameSite: http.SameSiteLaxMode,
 			Secure: c.Request.TLS != nil || c.GetHeader("X-Forwarded-Proto") == "https",
 		})
-		if val := session.Get("username"); val != nil {
-			c.Request = c.Request.WithContext(context.WithValue(c.Request.Context(), "username", val))
+		if value := session.Get("user_id"); value != nil {
+			userID, ok := value.(uint)
+			var user models.User
+			err := gorm.ErrRecordNotFound
+			if ok && userID != 0 {
+				err = shared.DB.Select("id", "username").First(&user, userID).Error
+			}
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				session.Clear()
+				if err := session.Save(); err != nil {
+					_ = c.Error(err)
+					c.AbortWithStatus(500)
+					return
+				}
+			} else if err != nil {
+				_ = c.Error(err)
+				c.AbortWithStatus(500)
+				return
+			} else {
+				c.Request = c.Request.WithContext(context.WithValue(c.Request.Context(), "username", user.Username))
+			}
 		}
 		c.Next()
 	}

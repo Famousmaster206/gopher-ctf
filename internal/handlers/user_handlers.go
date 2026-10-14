@@ -68,7 +68,7 @@ func ScoreboardHandler(c *gin.Context) {
 		return
 	}
 	if c.GetHeader("HX-Request") == "true" {
-		Render(c, 200, pages.Scoreboard(users))
+		RenderPageFragment(c, "Scoreboard", pages.Scoreboard(users))
 	} else {
 		Render(c, 200, pages.ScoreboardPage(users))
 	}
@@ -76,7 +76,7 @@ func ScoreboardHandler(c *gin.Context) {
 
 func LoginPageHandler(c *gin.Context) {
 	if c.GetHeader("HX-Request") == "true" {
-		Render(c, 200, pages.Login())
+		RenderPageFragment(c, "Log in", pages.Login())
 	} else {
 		Render(c, 200, pages.LoginPage())
 	}

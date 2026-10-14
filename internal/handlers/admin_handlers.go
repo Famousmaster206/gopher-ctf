@@ -39,12 +39,12 @@ func adminUsers(c *gin.Context) ([]models.User, bool) {
 }
 func AdminIndexHandler(c *gin.Context) {
 	if users, ok := adminUsers(c); ok {
-		Render(c, 200, pages.Admin(users))
+		Render(c, 200, pages.Admin(users, accountDeleteTokens(c, users), c.Query("deleted") == "1"))
 	}
 }
 func AdminPlayersHandler(c *gin.Context) {
 	if users, ok := adminUsers(c); ok {
-		Render(c, 200, pages.AdminPlayers(users))
+		Render(c, 200, pages.AdminPlayers(users, accountDeleteTokens(c, users)))
 	}
 }
 

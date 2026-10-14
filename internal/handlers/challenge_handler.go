@@ -137,7 +137,7 @@ func ChallengeIndividualHandler(c *gin.Context) {
 		return
 	}
 	if c.GetHeader("HX-Request") == "true" {
-		Render(c, 200, components.ChallengeCard(challenge, completed[challenge.ID]))
+		RenderPageFragment(c, "Challenge: "+challenge.Title, components.ChallengeCard(challenge, completed[challenge.ID]))
 	} else {
 		Render(c, 200, pages.ChallengeDetail(challenge, completed[challenge.ID]))
 	}
@@ -174,7 +174,7 @@ func ChallengeIndexHandler(c *gin.Context) {
 		challenges = visible
 	}
 	if c.GetHeader("HX-Request") == "true" {
-		Render(c, 200, pages.Challenges(challenges, completed, hideCompleted, query))
+		RenderPageFragment(c, "Challenges", pages.Challenges(challenges, completed, hideCompleted, query))
 	} else {
 		Render(c, 200, pages.ChallengesPage(challenges, completed, hideCompleted, query))
 	}
@@ -268,4 +268,10 @@ func completedChallenges(c *gin.Context) (map[uint]bool, error) {
 		completed[id] = true
 	}
 	return completed, nil
+}
+
+// Include the page title when navigation only replaces the main content.
+func RenderPageFragment(c *gin.Context, title string, cmp templ.Component) {
+	Render(c, 200, components.PageTitle(title))
+	_ = cmp.Render(c.Request.Context(), c.Writer)
 }

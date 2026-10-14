@@ -6,7 +6,7 @@ import (
  "strconv"
 )
 
-templ Admin(users []models.User) {
+templ Admin(users []models.User, deleteTokens map[uint]string, deleted bool) {
 	@components.Layout("Admin Dashboard") {
 		<div class="admin">
 			<div class="admin__header">
@@ -15,8 +15,11 @@ templ Admin(users []models.User) {
 			</div>
 			<section class="admin__card">
                 <h3>candy check</h3>
+                if deleted {
+                    <p class="admin__result" role="status">account deleted</p>
+                }
                 <p>ask for their name + points code. match them here, then check their points :D</p>
-                @AdminPlayers(users)
+                @AdminPlayers(users, deleteTokens)
             </section>
             <div class="admin__grid">
 				<section class="admin__card">
@@ -70,10 +73,10 @@ templ Admin(users []models.User) {
 }
 
 
-templ AdminPlayers(users []models.User) {
+templ AdminPlayers(users []models.User, deleteTokens map[uint]string) {
  <div id="admin-players" class="scoreboard-table-wrapper" hx-get="/secret-candy-vault/players" hx-trigger="every 10s" hx-swap="outerHTML">
   <table class="scoreboard-table">
-   <thead><tr><th>username</th><th>points</th><th>points code</th></tr></thead>
+   <thead><tr><th>username</th><th>points</th><th>points code</th><th>account</th></tr></thead>
    <tbody>
     for _, user := range users {
      <tr><td>{ user.Username }</td><td>{ strconv.Itoa(user.Score) }</td><td>
@@ -82,6 +85,12 @@ templ AdminPlayers(users []models.User) {
       } else {
        <span>old account ? no code</span>
       }
+     </td><td>
+      <form method="post" action={ "/admin/accounts/"+strconv.FormatUint(uint64(user.ID),10)+"/delete" } hx-boost="false" data-username={ user.Username } onsubmit="return confirm('delete ' + this.dataset.username + '? their points will be removed and they will be signed out.');">
+       <input type="hidden" name="username" value={ user.Username }/>
+       <input type="hidden" name="delete_token" value={ deleteTokens[user.ID] }/>
+       <button type="submit">delete account</button>
+      </form>
      </td></tr>
     }
    </tbody>

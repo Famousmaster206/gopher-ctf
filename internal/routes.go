@@ -39,6 +39,7 @@ func RegisterRoutes(router *gin.Engine) {
 	challengeAdmin.Use(AdminAuth())
 	challengeAdmin.GET("/challenges", handlers.AdminChallengesHandler)
 	challengeAdmin.POST("/challenges/:id", handlers.UpdateChallengeHandler)
+	challengeAdmin.POST("/accounts/:id/delete", handlers.DeleteAccountHandler)
 	router.GET("/scoreboard", handlers.ScoreboardHandler)
 }
 

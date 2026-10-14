@@ -135,7 +135,7 @@ func RegisterPageHandler(c *gin.Context) {
 		return
 	}
 	if c.GetHeader("HX-Request") == "true" {
-		Render(c, 200, pages.Signup(draft.Username, draft.Token, maxRerolls-draft.Rerolls))
+		RenderPageFragment(c, "Join", pages.Signup(draft.Username, draft.Token, maxRerolls-draft.Rerolls))
 	} else {
 		Render(c, 200, pages.SignupPage(draft.Username, draft.Token, maxRerolls-draft.Rerolls))
 	}
@@ -185,7 +185,7 @@ func RerollUsernameHandler(c *gin.Context) {
 		signupError(c, err)
 		return
 	}
-	Render(c, 200, pages.Signup(draft.Username, draft.Token, maxRerolls-draft.Rerolls))
+	RenderPageFragment(c, "Join", pages.Signup(draft.Username, draft.Token, maxRerolls-draft.Rerolls))
 }
 
 func signupError(c *gin.Context, err error) {
@@ -247,7 +247,7 @@ func RegisterHandler(c *gin.Context) {
 	if err = session.Save(); err != nil {
 		_ = c.Error(err)
 	}
-	Render(c, 200, pages.AccountCreated(user.Username, loginCode, pointsCode))
+	RenderPageFragment(c, "My codes", pages.AccountCreated(user.Username, loginCode, pointsCode))
 }
 
 func AccountHandler(c *gin.Context) {
@@ -264,7 +264,7 @@ func AccountHandler(c *gin.Context) {
 		return
 	}
 	if c.GetHeader("HX-Request") == "true" {
-		Render(c, 200, pages.Account(user))
+		RenderPageFragment(c, "My codes", pages.Account(user))
 	} else {
 		Render(c, 200, pages.AccountPage(user))
 	}
