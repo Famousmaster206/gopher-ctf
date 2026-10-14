@@ -29,6 +29,11 @@ func editorRouter() *gin.Engine {
 
 func TestChallengeEditorRequiresAdmin(t *testing.T) {
 	r := editorRouter()
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, httptest.NewRequest("GET", "/admin/challenges/new", nil))
+	if w.Code != 401 {
+		t.Fatal("challenge creation page must require admin login")
+	}
 	for _, method := range []string{"GET", "POST"} {
 		path := "/admin/challenges"
 		if method == "POST" {

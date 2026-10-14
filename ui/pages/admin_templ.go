@@ -47,7 +47,7 @@ func Admin(users []models.User, deleteTokens map[uint]string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"admin\"><div class=\"admin__header\"><h2>uhh if ur not supposed to be here please leave, thank you :D</h2><!-- final and strongest defense --><a class=\"admin-nav-button\" href=\"/admin/challenges\" hx-boost=\"false\">view &amp; edit challenges</a></div><section class=\"admin__card\"><h3>candy check</h3><p>ask for their name + points code. match them here, then check their points :D</p>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"admin\"><div class=\"admin__header\"><h2>uhh if ur not supposed to be here please leave, thank you :D</h2><!-- final and strongest defense --><a class=\"admin-nav-button\" href=\"/admin/challenges/new\" hx-boost=\"false\">add challenge</a> <a class=\"admin-nav-button\" href=\"/admin/challenges\" hx-boost=\"false\">view &amp; edit challenges</a></div><section class=\"admin__card\"><h3>candy check</h3><p>ask for their name + points code. match them here, then check their points :D</p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -55,7 +55,7 @@ func Admin(users []models.User, deleteTokens map[uint]string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</section><div class=\"admin__grid\"><section class=\"admin__card\"><div class=\"admin__card-header\"><h3>Add challenge</h3></div><form class=\"admin__form\" hx-post=\"/secret-candy-vault/challenge\" hx-target=\"#upload-result\" enctype=\"multipart/form-data\"><label class=\"admin__field\"><span>files</span> <input type=\"file\" name=\"challenge_files\" accept=\".tar, .tar.gz, application/x-tar, application/gzip\" placeholder=\" i like tar files\"></label> <label class=\"admin__field\"><span>name</span> <input type=\"text\" name=\"challenge_name\" placeholder=\"challenge name\" required></label><p class=\"admin__hint\">no funky symbols in the name btw.</p><label class=\"admin__field\"><span>description</span> <input type=\"text\" name=\"challenge_description\" placeholder=\"description\" required></label> <label class=\"admin__field\"><span>points</span> <input type=\"number\" name=\"challenge_points\" min=\"0\" placeholder=\"challenge points\" required></label> <label class=\"admin__field\"><span>flag(include header)</span> <input type=\"text\" name=\"challenge_flag\" placeholder=\"flag{this_is_a_flag}\" required></label> <button type=\"submit\">Upload challenge</button></form><div id=\"upload-result\" class=\"admin__result\"></div></section><section class=\"admin__card admin__card--compact\"><div class=\"admin__card-header\"><h2>Reload config</h2><p>Refresh the app configuration after updating environment-backed values.</p></div><form class=\"admin__actions\" hx-post=\"/secret-candy-vault/reload-config\" hx-target=\"#reload-result\"><button type=\"submit\">Reload config</button></form><div id=\"reload-result\" class=\"admin__result\"></div></section></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</section><div class=\"admin__grid\"><section class=\"admin__card admin__card--compact\"><div class=\"admin__card-header\"><h2>Reload config</h2><p>Refresh the app configuration after updating environment-backed values.</p></div><form class=\"admin__actions\" hx-post=\"/secret-candy-vault/reload-config\" hx-target=\"#reload-result\"><button type=\"submit\">Reload config</button></form><div id=\"reload-result\" class=\"admin__result\"></div></section></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -102,7 +102,7 @@ func AdminPlayers(users []models.User, deleteTokens map[uint]string) templ.Compo
 			var templ_7745c5c3_Var4 string
 			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(user.Username)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 79, Col: 28}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 46, Col: 28}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 			if templ_7745c5c3_Err != nil {
@@ -115,7 +115,7 @@ func AdminPlayers(users []models.User, deleteTokens map[uint]string) templ.Compo
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(user.Score))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 79, Col: 65}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 46, Col: 65}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {
@@ -133,7 +133,7 @@ func AdminPlayers(users []models.User, deleteTokens map[uint]string) templ.Compo
 				var templ_7745c5c3_Var6 string
 				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(*user.VerificationCode)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 81, Col: 37}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 48, Col: 37}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
@@ -156,7 +156,7 @@ func AdminPlayers(users []models.User, deleteTokens map[uint]string) templ.Compo
 			var templ_7745c5c3_Var7 templ.SafeURL
 			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinURLErrs("/admin/accounts/" + strconv.FormatUint(uint64(user.ID), 10) + "/delete")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 86, Col: 102}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 53, Col: 102}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
@@ -169,7 +169,7 @@ func AdminPlayers(users []models.User, deleteTokens map[uint]string) templ.Compo
 			var templ_7745c5c3_Var8 string
 			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(user.Username)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 86, Col: 151}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 53, Col: 151}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 			if templ_7745c5c3_Err != nil {
@@ -182,7 +182,7 @@ func AdminPlayers(users []models.User, deleteTokens map[uint]string) templ.Compo
 			var templ_7745c5c3_Var9 string
 			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(user.Username)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 87, Col: 65}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 54, Col: 65}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
@@ -195,7 +195,7 @@ func AdminPlayers(users []models.User, deleteTokens map[uint]string) templ.Compo
 			var templ_7745c5c3_Var10 string
 			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(deleteTokens[user.ID])
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 88, Col: 77}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin.templ`, Line: 55, Col: 77}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {

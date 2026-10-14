@@ -43,7 +43,7 @@ func AdminLogin() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h1>Admin Login</h1><div class=\"login\"><form hx-post=\"/gimme-secret-candy-vault\" hx-target=\"#login-result\"><label><input type=\"password\" name=\"password\" placeholder=\"Enter admin password\" required></label> <button type=\"submit\">Login</button></form><div id=\"login-result\"></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"login admin-login\"><h2>Admin Login</h2><form class=\"panel__form\" hx-post=\"/gimme-secret-candy-vault\" hx-target=\"#login-result\"><label class=\"panel__field\"><span>admin password</span> <input type=\"password\" name=\"password\" placeholder=\"Enter admin password\" required></label> <button type=\"submit\">Login</button></form><div id=\"login-result\" class=\"panel__result\" role=\"status\"></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

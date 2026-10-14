@@ -54,3 +54,8 @@ func ConfigReloadHandler(c *gin.Context) {
 	shared.InitConfig()
 	c.String(http.StatusOK, "Config reloaded")
 }
+
+func AdminAddChallengeHandler(c *gin.Context) {
+	c.Header("Cache-Control", "no-store")
+	Render(c, 200, pages.AdminAddChallenge())
+}

@@ -1,0 +1,52 @@
+package pages
+
+import "github.com/openlyfree/gopher-ctf/ui/components"
+
+templ AdminAddChallenge() {
+ @components.Layout("Add challenge") {
+  <div class="admin admin--challenge-create">
+   <div class="admin__header">
+    <h2>add challenge</h2>
+    <a class="admin-nav-button" href="/secret-candy-vault/" hx-boost="false">back to the candy vault</a>
+   </div>
+				<section class="admin__card">
+					<div class="admin__card-header">
+						<h3>Add challenge</h3>
+					</div>
+					<form
+						class="admin__form"
+						method="post"
+                        action="/secret-candy-vault/challenge"
+                        hx-post="/secret-candy-vault/challenge"
+                        hx-encoding="multipart/form-data"
+						hx-target="#upload-result"
+						enctype="multipart/form-data"
+					>
+						<label class="admin__field">
+							<span>files</span>
+							<input type="file" name="challenge_files" accept=".tar, .tar.gz, application/x-tar, application/gzip" placeholder=" i like tar files"/>
+						</label>
+						<label class="admin__field">
+							<span>name</span>
+							<input type="text" name="challenge_name" placeholder="challenge name" required/>
+						</label>
+						<p class="admin__hint">no funky symbols in the name btw.</p>
+						<label class="admin__field">
+							<span>description</span>
+							<input type="text" name="challenge_description" placeholder="description" required/>
+						</label>
+						<label class="admin__field">
+							<span>points</span>
+							<input type="number" name="challenge_points" min="0" placeholder="challenge points" required/>
+						</label>
+						<label class="admin__field">
+							<span>flag(include header)</span>
+							<input type="text" name="challenge_flag" placeholder="flag{this_is_a_flag}" required/>
+						</label>
+						<button type="submit">Upload challenge</button>
+					</form>
+					<div id="upload-result" class="admin__result"></div>
+				</section>
+  </div>
+ }
+}

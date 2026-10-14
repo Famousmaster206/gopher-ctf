@@ -824,3 +824,7 @@ nav.admin-challenge-list a[aria-current="true"] {
 }
 
 .home-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+
+.login.admin-login { max-width: 420px; gap: 16px; }
+
+.admin.admin--challenge-create { width: min(640px, 100%); }

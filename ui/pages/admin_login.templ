@@ -4,15 +4,16 @@ import "github.com/openlyfree/gopher-ctf/ui/components"
 
 templ AdminLogin() {
 	@components.Layout("Admin Login") {
-		<h1>Admin Login</h1>
-		<div class="login">
-			<form hx-post="/gimme-secret-candy-vault" hx-target="#login-result">
-				<label>
+		<div class="login admin-login">
+            <h2>Admin Login</h2>
+			<form class="panel__form" hx-post="/gimme-secret-candy-vault" hx-target="#login-result">
+				<label class="panel__field">
+                    <span>admin password</span>
 					<input type="password" name="password" placeholder="Enter admin password" required/>
 				</label>
 				<button type="submit">Login</button>
 			</form>
-			<div id="login-result"></div>
+			<div id="login-result" class="panel__result" role="status"></div>
 		</div>
 	}
 }
