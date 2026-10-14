@@ -667,3 +667,6 @@ main:has(div.signup) {
 .challenge-card[data-completed="true"]:hover {
   border: 2px solid #64dc8c;
 }
+
+.challenges-container { display: flex; flex-direction: column; gap: 16px; width: 100%; }
+.challenge-filter { align-self: flex-start; color: var(--primary); }

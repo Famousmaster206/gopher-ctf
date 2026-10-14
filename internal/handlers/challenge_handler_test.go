@@ -176,6 +176,23 @@ func TestPostgresScoring(t *testing.T) {
 			}
 		}
 	}
+	for _, hx := range []bool{false, true} {
+		for _, tc := range []struct {
+			id        uint
+			completed bool
+		}{{user.ID, true}, {other.ID, false}, {0, false}} {
+			w := loadUI(tc.id, "/challenges?hide_completed=1", hx)
+			if w.Code != 200 || strings.Contains(w.Body.String(), `class="challenge-card"`) == tc.completed {
+				t.Fatal("hide completed must filter only the current player's solved challenges")
+			}
+			if !strings.Contains(w.Body.String(), "show completed") {
+				t.Fatal("missing way to restore completed challenges")
+			}
+			if tc.completed && !strings.Contains(w.Body.String(), "no unfinished challenges") {
+				t.Fatal("missing filtered empty state")
+			}
+		}
+	}
 	id := fmt.Sprint(challenge.ID)
 	if w := requestFlagWithHTMX(other.ID, id, " \nflag{x}\t ", true); w.Code != 200 {
 		t.Fatalf("trimmed success: %d %s", w.Code, w.Body.String())

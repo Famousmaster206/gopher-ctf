@@ -162,10 +162,20 @@ func ChallengeIndexHandler(c *gin.Context) {
 		c.String(500, "Database error")
 		return
 	}
+	hideCompleted := c.Query("hide_completed") == "1"
+	if hideCompleted {
+		visible := make([]models.Challenge, 0, len(challenges))
+		for _, challenge := range challenges {
+			if !completed[challenge.ID] {
+				visible = append(visible, challenge)
+			}
+		}
+		challenges = visible
+	}
 	if c.GetHeader("HX-Request") == "true" {
-		Render(c, 200, pages.Challenges(challenges, completed))
+		Render(c, 200, pages.Challenges(challenges, completed, hideCompleted))
 	} else {
-		Render(c, 200, pages.ChallengesPage(challenges, completed))
+		Render(c, 200, pages.ChallengesPage(challenges, completed, hideCompleted))
 	}
 }
 

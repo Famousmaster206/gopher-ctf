@@ -6,8 +6,13 @@ import (
 	"strconv"
 )
 
-templ Challenges(challenges []models.Challenge, completed map[uint]bool) {
+templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCompleted bool) {
 	<div class="challenges-container">
+        if hideCompleted {
+            <a class="challenge-filter" href="/challenges" hx-get="/challenges" hx-target="main" hx-replace-url="true">show completed</a>
+        } else {
+            <a class="challenge-filter" href="/challenges?hide_completed=1" hx-get="/challenges?hide_completed=1" hx-target="main" hx-replace-url="true">hide completed</a>
+        }
 		<div class="challenges-grid">
 			for _, c := range challenges {
 				<div class="challenge-card" data-completed={ strconv.FormatBool(completed[c.ID]) }>
@@ -22,14 +27,18 @@ templ Challenges(challenges []models.Challenge, completed map[uint]bool) {
 				</div>
 			}
 			if len(challenges) == 0 {
-				<p class="no-challenges">No challenges available yet. Check back soon!</p>
+				if hideCompleted {
+                    <p class="no-challenges">no unfinished challenges. nice :D</p>
+                } else {
+                    <p class="no-challenges">No challenges available yet. Check back soon!</p>
+                }
 			}
 		</div>
 	</div>
 }
 
-templ ChallengesPage(challenges []models.Challenge, completed map[uint]bool) {
+templ ChallengesPage(challenges []models.Challenge, completed map[uint]bool, hideCompleted bool) {
 	@components.Layout("Challenges") {
-		@Challenges(challenges, completed)
+		@Challenges(challenges, completed, hideCompleted)
 	}
 }
