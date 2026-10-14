@@ -9,7 +9,8 @@ templ ChallengeCard(c models.Challenge, completed bool) {
 	<div class="challenge-detail">
 		<a class="challenge-filter" href="/challenges" hx-get="/challenges" hx-target="main" hx-replace-url="true">Back to challenges</a>
 		<h1>{ c.Title }</h1>
-		<p>{ c.Description }</p>
+		<div class="challenge-content">
+            <div class="challenge-description"><p>{ c.Description }</p></div>
         if len(c.HintList()) > 0 {
             <section class="challenge-hints" aria-label="Free hints">
                 <h3>need a hint?</h3>
@@ -22,6 +23,7 @@ templ ChallengeCard(c models.Challenge, completed bool) {
                 }
             </section>
         }
+        </div>
 		<div id="challenge-status">
             if completed {
                 <p class="challenge-completed">completed! 🔥</p>

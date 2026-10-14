@@ -843,3 +843,12 @@ a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offs
 .challenge-hint summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 13px; }
 .challenge-hint > p { padding: 0 16px 16px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .challenge-hint[open] { border-color: rgba(255,255,255,.3); }
+
+.challenge-detail:has(.challenge-hints) { width: min(960px, 100%); }
+.challenge-content { display: grid; grid-template-columns: minmax(0,1fr); gap: 24px; align-items: start; }
+.challenge-content:has(.challenge-hints) { grid-template-columns: minmax(0,1.5fr) minmax(240px,1fr); }
+.challenge-description { min-width: 0; }
+.challenge-description p { white-space: pre-wrap; overflow-wrap: anywhere; }
+@media (max-width: 700px) {
+  .challenge-content:has(.challenge-hints) { grid-template-columns: minmax(0,1fr); }
+}

@@ -47,20 +47,20 @@ func ChallengeCard(c models.Challenge, completed bool) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1><p>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</h1><div class=\"challenge-content\"><div class=\"challenge-description\"><p>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(c.Description)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/components/challenge_card.templ`, Line: 12, Col: 20}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/components/challenge_card.templ`, Line: 13, Col: 65}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</p></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -77,7 +77,7 @@ func ChallengeCard(c models.Challenge, completed bool) templ.Component {
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(i + 1))
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/components/challenge_card.templ`, Line: 19, Col: 57}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/components/challenge_card.templ`, Line: 20, Col: 57}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
@@ -90,7 +90,7 @@ func ChallengeCard(c models.Challenge, completed bool) templ.Component {
 				var templ_7745c5c3_Var5 string
 				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(hint)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/components/challenge_card.templ`, Line: 20, Col: 33}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/components/challenge_card.templ`, Line: 21, Col: 33}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
@@ -106,7 +106,7 @@ func ChallengeCard(c models.Challenge, completed bool) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div id=\"challenge-status\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div id=\"challenge-status\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -128,7 +128,7 @@ func ChallengeCard(c models.Challenge, completed bool) templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs("/challenges/" + strconv.Itoa(int(c.ID)) + "/submit")
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/components/challenge_card.templ`, Line: 36, Col: 87}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/components/challenge_card.templ`, Line: 38, Col: 87}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
@@ -175,7 +175,7 @@ func CompletionFeedback(message string) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(message)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/components/challenge_card.templ`, Line: 45, Col: 16}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/components/challenge_card.templ`, Line: 47, Col: 16}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
