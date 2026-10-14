@@ -6,3 +6,4 @@ ui/*.go
 /ctf.db-wal
 ctf/
 .idea/
+.env.local
