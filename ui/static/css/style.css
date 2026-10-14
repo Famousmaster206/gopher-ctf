@@ -604,3 +604,40 @@ div.admin {
     padding: 24px;
   }
 }
+
+/* Account cards use the same panels as signup and login. */
+.account-name { font-size: 1.5rem; font-weight: bold; overflow-wrap: anywhere; }
+.account-codes { display: grid; gap: 1rem; }
+.account-codes > div { padding: 1rem; border: 1px solid #555; border-radius: 12px; }
+.account-code { font-family: monospace; font-size: 2rem; letter-spacing: .15em; margin: .5rem 0; }
+.account-hint { font-size: .9rem; opacity: .85; }
+.account-continue {
+  display: inline-block;
+  padding: .75rem 1rem;
+  color: var(--primary);
+  text-decoration: none;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, .12);
+  border-radius: 13px;
+  background: rgba(20, 20, 20, .4);
+  font-family: "Cascadia Code", Monospaced, monospace;
+}
+.signup form + p { margin-top: .75rem; }
+.admin > .admin__card { margin-bottom: 1.5rem; }
+
+/* Longer code receipts stay in the page flow, including on small screens. */
+main:has(div.signup) {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
+  margin: 24px auto 40px;
+}
+.signup { gap: 16px; }
+.signup p { margin: 0; line-height: 1.5; }
+.account-codes h3 { margin: 0 0 .5rem; }
+@media (max-width: 600px) {
+  nav { flex-wrap: wrap; gap: 12px; }
+  nav .links, nav .usr { display: flex; flex-wrap: wrap; gap: 8px; }
+  nav a { margin: 0; }
+}

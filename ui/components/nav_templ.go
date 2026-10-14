@@ -56,7 +56,7 @@ func Nav() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</a> <a hx-post=\"/logout\" hx-target=\"body\" hx-replace-url=\"true\">Logout</a>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</a> <a hx-get=\"/account\" hx-target=\"main\" hx-replace-url=\"true\">My codes</a> <a hx-post=\"/logout\" hx-target=\"body\" hx-replace-url=\"true\">Logout</a>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -1,13 +1,15 @@
 package handlers
 
 import (
-	goaway "github.com/TwiN/go-away"
+	"strings"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/openlyfree/gopher-ctf/internal/models"
 	"github.com/openlyfree/gopher-ctf/internal/shared"
 	"github.com/openlyfree/gopher-ctf/ui/pages"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 func LogoutHandler(c *gin.Context) {
@@ -23,11 +25,26 @@ func LogoutHandler(c *gin.Context) {
 
 func LoginHandler(c *gin.Context) {
 	var user models.User
-	if err := shared.DB.Where("username = ?", c.PostForm("username")).First(&user).Error; err != nil {
+	if err := shared.DB.Where("username = ?", strings.TrimSpace(c.PostForm("username"))).First(&user).Error; err != nil {
 		c.String(200, "Invalid credentials")
 		return
 	}
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(c.PostForm("password"))); err != nil {
+	attempt := shared.DB.Model(&models.User{}).Where("id = ? AND (last_login_attempt IS NULL OR last_login_attempt <= CURRENT_TIMESTAMP - INTERVAL '2 seconds')", user.ID).Update("last_login_attempt", gorm.Expr("CURRENT_TIMESTAMP"))
+	if attempt.Error != nil {
+		_ = c.Error(attempt.Error)
+		c.String(200, "couldn't log in. try again")
+		return
+	}
+	if attempt.RowsAffected == 0 {
+		c.String(200, "wait 2 seconds, then try your login code again")
+		return
+	}
+	code := strings.TrimSpace(c.PostForm("login_code"))
+	// Older accounts can still use their existing password.
+	if code == "" {
+		code = c.PostForm("password")
+	}
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(code)); err != nil {
 		c.String(200, "Invalid credentials")
 		return
 	}
@@ -44,26 +61,6 @@ func LoginHandler(c *gin.Context) {
 	c.Status(200)
 }
 
-func RegisterHandler(c *gin.Context) {
-	if goaway.IsProfane(c.PostForm("username")) {
-		c.String(200, "Invalid Username")
-		return
-	}
-
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(c.PostForm("password")), 14)
-	if err != nil {
-		c.String(200, "Error creating account")
-		return
-	}
-
-	if err := shared.DB.Create(&models.User{Username: c.PostForm("username"), Password: string(hashedPassword)}).Error; err != nil {
-		c.String(200, "Username already taken")
-		return
-	}
-	c.Header("HX-Redirect", "/login")
-	c.Status(200)
-}
-
 func ScoreboardHandler(c *gin.Context) {
 	var users []models.User
 	if err := shared.DB.Order("score desc").Order("id asc").Find(&users).Error; err != nil {
@@ -74,14 +71,6 @@ func ScoreboardHandler(c *gin.Context) {
 		Render(c, 200, pages.Scoreboard(users))
 	} else {
 		Render(c, 200, pages.ScoreboardPage(users))
-	}
-}
-
-func RegisterPageHandler(c *gin.Context) {
-	if c.GetHeader("HX-Request") == "true" {
-		Render(c, 200, pages.Signup())
-	} else {
-		Render(c, 200, pages.SignupPage())
 	}
 }
 

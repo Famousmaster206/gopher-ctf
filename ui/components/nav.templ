@@ -19,6 +19,7 @@ templ Nav() {
 		<div class="usr">
 			if username := GetUser(ctx); username != "" {
 				<a>{ username }</a>
+                <a hx-get="/account" hx-target="main" hx-replace-url="true">My codes</a>
 				<a hx-post="/logout" hx-target="body" hx-replace-url="true">Logout</a>
 			} else {
 				<a hx-get="/login" hx-target="main" hx-replace-url="true">Log in</a>

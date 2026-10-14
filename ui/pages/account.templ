@@ -1,0 +1,28 @@
+package pages
+
+import (
+ "strconv"
+ "github.com/openlyfree/gopher-ctf/internal/models"
+ "github.com/openlyfree/gopher-ctf/ui/components"
+)
+
+templ Account(user models.User) {
+ <div class="signup">
+  <h2>My codes</h2>
+  <p class="account-name">{ user.Username }</p>
+  <p>{ strconv.Itoa(user.Score) } points</p>
+  if user.VerificationCode != nil {
+   <h3>points code</h3>
+   <p class="account-code">{ *user.VerificationCode }</p>
+   <p>give your name + this code to your teacher so they can check your points.</p>
+   <p><strong>you need this code to get candy. write it down!</strong></p>
+  } else {
+   <p>this account was made before points codes. ask your teacher about candy.</p>
+  }
+  <p class="account-hint">your login code was shown when you joined. keep that one to yourself.</p>
+ </div>
+}
+
+templ AccountPage(user models.User) {
+ @components.Layout("My codes") { @Account(user) }
+}
