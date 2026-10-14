@@ -78,6 +78,10 @@ func TestPostgresChallengeEditor(t *testing.T) {
 	if err = db.Create(&challenge).Error; err != nil {
 		t.Fatal(err)
 	}
+	second := models.Challenge{Title: "Second challenge", Description: "Other description", Points: 200, Flag: "flag{second}"}
+	if err = db.Create(&second).Error; err != nil {
+		t.Fatal(err)
+	}
 	user := models.User{Username: "player", Password: "unused", Score: 100}
 	if err = db.Create(&user).Error; err != nil {
 		t.Fatal(err)
@@ -95,10 +99,32 @@ func TestPostgresChallengeEditor(t *testing.T) {
 	if w.Code != 200 || !strings.Contains(w.Body.String(), "Original") || !strings.Contains(w.Body.String(), "flag{old}") || w.Header().Get("Cache-Control") != "no-store" {
 		t.Fatal("editor did not list existing challenges")
 	}
+	if strings.Count(w.Body.String(), `name="challenge_flag"`) != 1 || strings.Contains(w.Body.String(), "flag{second}") {
+		t.Fatal("the page must contain only the selected edit form")
+	}
+	secondPath := "/admin/challenges?id=" + fmt.Sprint(second.ID)
+	w = request("GET", secondPath, nil)
+	if w.Code != 200 || !strings.Contains(w.Body.String(), `value="flag{second}"`) || strings.Contains(w.Body.String(), `value="flag{old}"`) {
+		t.Fatal("sidebar selection did not change the editor")
+	}
+	req := httptest.NewRequest("GET", secondPath+"&q=Second", nil)
+	req.Header.Set("HX-Request", "true")
+	req.AddCookie(&http.Cookie{Name: "secret_candy_vault_access", Value: token})
+	w = httptest.NewRecorder()
+	r.ServeHTTP(w, req)
+	if w.Code != 200 || strings.Contains(w.Body.String(), "<!doctype") || !strings.Contains(w.Body.String(), "admin-challenge-workspace") || strings.Contains(w.Body.String(), ">Original</span>") {
+		t.Fatal("search should return the filtered workspace for HTMX")
+	}
+	if w = request("GET", "/admin/challenges?id=nope", nil); w.Code != 400 {
+		t.Fatal("invalid selection accepted")
+	}
+	if w = request("GET", "/admin/challenges?id=999999", nil); w.Code != 404 {
+		t.Fatal("missing selection accepted")
+	}
 	path := fmt.Sprintf("/admin/challenges/%d", challenge.ID)
 	values := url.Values{"challenge_name": {" Updated "}, "challenge_description": {"new\ndescription"}, "challenge_points": {"0"}, "challenge_flag": {" flag{new} "}}
 	w = request("POST", path, values)
-	if w.Code != 303 || w.Header().Get("Location") != "/admin/challenges?saved=1" {
+	if w.Code != 303 || w.Header().Get("Location") != "/admin/challenges?saved=1&id="+fmt.Sprint(challenge.ID) {
 		t.Fatalf("save: %d %s", w.Code, w.Body.String())
 	}
 	if err = db.First(&challenge, challenge.ID).Error; err != nil {
