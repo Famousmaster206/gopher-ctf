@@ -14,6 +14,7 @@ func RegisterRoutes(router *gin.Engine) {
 	}
 	staticGroup.Static("/", "./ui/static")
 	router.StaticFile("/favicon.png", "./public/favicon.png")
+	router.StaticFile("/favicon.svg", "./public/favicon.svg")
 	router.Use(UserLoader())
 	router.GET("/", func(c *gin.Context) { Render(c, 200, pages.Index()) })
 	router.GET("/login", handlers.LoginPageHandler)
