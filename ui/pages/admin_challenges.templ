@@ -23,9 +23,9 @@ templ AdminChallenges(challenges []models.Challenge, selected *models.Challenge,
 
 templ AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Challenge, message string, query string) {
  <div id="admin-challenge-workspace" class="admin-challenge-workspace">
-  <aside class="admin__card admin-challenge-sidebar" aria-label="Challenges">
+  <aside id="admin-challenge-sidebar" class="admin__card admin-challenge-sidebar" aria-label="Challenges">
    <h3>challenges</h3>
-   <form class="admin__form" method="get" action="/admin/challenges" hx-get="/admin/challenges" hx-target="#admin-challenge-workspace" hx-swap="outerHTML" hx-replace-url="true">
+   <form class="admin__form" method="get" action="/admin/challenges" hx-get="/admin/challenges" hx-target="#admin-challenge-sidebar" hx-select="#admin-challenge-sidebar" hx-swap="outerHTML" hx-replace-url="true">
     if selected != nil {
      <input type="hidden" name="id" value={ strconv.FormatUint(uint64(selected.ID),10) }/>
     }
@@ -54,7 +54,7 @@ templ AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Ch
    }
    if selected!=nil {
     <h3>{ selected.Title }</h3>
-    <form class="admin__form" method="post" action={ "/admin/challenges/"+strconv.FormatUint(uint64(selected.ID),10)+"?q="+url.QueryEscape(query) } hx-boost="false">
+    <form class="admin__form" onsubmit="const search = document.querySelector('#admin-challenge-sidebar input[name=q]'); if (search) { const destination = new URL(this.action); destination.searchParams.set('q', search.value); this.action = destination.toString(); }" method="post" action={ "/admin/challenges/"+strconv.FormatUint(uint64(selected.ID),10)+"?q="+url.QueryEscape(query) } hx-boost="false">
      <label class="admin__field"><span>name</span><input type="text" name="challenge_name" value={ selected.Title } required/></label>
      <label class="admin__field"><span>description</span><textarea name="challenge_description" rows="6" required>{ selected.Description }</textarea></label>
      <label class="admin__field"><span>points</span><input type="number" name="challenge_points" min="0" step="1" value={ strconv.Itoa(selected.Points) } required/></label>

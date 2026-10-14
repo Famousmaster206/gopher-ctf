@@ -91,7 +91,7 @@ func AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Cha
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div id=\"admin-challenge-workspace\" class=\"admin-challenge-workspace\"><aside class=\"admin__card admin-challenge-sidebar\" aria-label=\"Challenges\"><h3>challenges</h3><form class=\"admin__form\" method=\"get\" action=\"/admin/challenges\" hx-get=\"/admin/challenges\" hx-target=\"#admin-challenge-workspace\" hx-swap=\"outerHTML\" hx-replace-url=\"true\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div id=\"admin-challenge-workspace\" class=\"admin-challenge-workspace\"><aside id=\"admin-challenge-sidebar\" class=\"admin__card admin-challenge-sidebar\" aria-label=\"Challenges\"><h3>challenges</h3><form class=\"admin__form\" method=\"get\" action=\"/admin/challenges\" hx-get=\"/admin/challenges\" hx-target=\"#admin-challenge-sidebar\" hx-select=\"#admin-challenge-sidebar\" hx-swap=\"outerHTML\" hx-replace-url=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -269,14 +269,14 @@ func AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Cha
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "</h3><form class=\"admin__form\" method=\"post\" action=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "</h3><form class=\"admin__form\" onsubmit=\"const search = document.querySelector('#admin-challenge-sidebar input[name=q]'); if (search) { const destination = new URL(this.action); destination.searchParams.set('q', search.value); this.action = destination.toString(); }\" method=\"post\" action=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var14 templ.SafeURL
 			templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinURLErrs("/admin/challenges/" + strconv.FormatUint(uint64(selected.ID), 10) + "?q=" + url.QueryEscape(query))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/pages/admin_challenges.templ`, Line: 57, Col: 145}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/pages/admin_challenges.templ`, Line: 57, Col: 382}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 			if templ_7745c5c3_Err != nil {

@@ -685,3 +685,7 @@ nav.admin-challenge-list a:hover, nav.admin-challenge-list a[aria-current="true"
  .admin-challenge-sidebar { position: static; }
  nav.admin-challenge-list { max-height: 240px; }
 }
+
+.challenge-search { display: flex; align-items: end; gap: 12px; max-width: 640px; width: 100%; }
+.challenge-search .panel__field { flex: 1; min-width: 0; }
+.challenge-search input { width: 100%; }

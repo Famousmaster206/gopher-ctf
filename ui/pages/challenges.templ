@@ -4,14 +4,22 @@ import (
 	"github.com/openlyfree/gopher-ctf/internal/models"
 	"github.com/openlyfree/gopher-ctf/ui/components"
 	"strconv"
+ "net/url"
 )
 
-templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCompleted bool) {
+templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCompleted bool, query string) {
 	<div class="challenges-container">
+        <form class="challenge-search" method="get" action="/challenges" hx-get="/challenges" hx-target="main" hx-replace-url="true">
+            <label class="panel__field"><span>find a challenge</span><input type="search" name="q" value={ query } placeholder="name or description"/></label>
+            if hideCompleted {
+                <input type="hidden" name="hide_completed" value="1"/>
+            }
+            <button type="submit">find</button>
+        </form>
         if hideCompleted {
-            <a class="challenge-filter" href="/challenges" hx-get="/challenges" hx-target="main" hx-replace-url="true">show completed</a>
+            <a class="challenge-filter" href={ "/challenges?q="+url.QueryEscape(query) } hx-get={ "/challenges?q="+url.QueryEscape(query) } hx-target="main" hx-replace-url="true">show completed</a>
         } else {
-            <a class="challenge-filter" href="/challenges?hide_completed=1" hx-get="/challenges?hide_completed=1" hx-target="main" hx-replace-url="true">hide completed</a>
+            <a class="challenge-filter" href={ "/challenges?hide_completed=1&q="+url.QueryEscape(query) } hx-get={ "/challenges?hide_completed=1&q="+url.QueryEscape(query) } hx-target="main" hx-replace-url="true">hide completed</a>
         }
 		<div class="challenges-grid">
 			for _, c := range challenges {
@@ -27,7 +35,9 @@ templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCom
 				</div>
 			}
 			if len(challenges) == 0 {
-				if hideCompleted {
+				if query != "" {
+                    <p class="no-challenges">no matches. try another search or show completed.</p>
+                } else if hideCompleted {
                     <p class="no-challenges">no unfinished challenges. nice :D</p>
                 } else {
                     <p class="no-challenges">No challenges available yet. Check back soon!</p>
@@ -37,8 +47,8 @@ templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCom
 	</div>
 }
 
-templ ChallengesPage(challenges []models.Challenge, completed map[uint]bool, hideCompleted bool) {
+templ ChallengesPage(challenges []models.Challenge, completed map[uint]bool, hideCompleted bool, query string) {
 	@components.Layout("Challenges") {
-		@Challenges(challenges, completed, hideCompleted)
+		@Challenges(challenges, completed, hideCompleted, query)
 	}
 }
