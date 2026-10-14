@@ -86,7 +86,8 @@ nav a {
 }
 
 button,
-input {
+input,
+.challenge-filter {
   background: rgba(20, 20, 20, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -669,7 +670,21 @@ main:has(div.signup) {
 }
 
 .challenges-container { display: flex; flex-direction: column; gap: 16px; width: 100%; }
-.challenge-filter { align-self: flex-start; color: var(--primary); }
+.challenge-filter {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+}
+.challenge-filter:hover {
+  background: rgba(255, 255, 255, .08);
+  border-color: rgba(255, 255, 255, .3);
+}
+.challenge-filter:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
 
 .admin.admin--challenge-editor { width: min(1200px, 100%); }
 .admin-challenge-workspace { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 24px; align-items: start; }
