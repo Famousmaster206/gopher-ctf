@@ -12,7 +12,7 @@ templ AdminChallenges(challenges []models.Challenge, selected *models.Challenge,
   <div class="admin admin--challenge-editor">
    <div class="admin__header">
     <h2>view &amp; edit challenges</h2>
-    <a href="/secret-candy-vault/" hx-boost="false">back to the candy vault</a>
+    <a class="admin-nav-button" href="/secret-candy-vault/" hx-boost="false">back to the candy vault</a>
     <p>pick a challenge on the left. change what's needed, then hit save :D</p>
     <p class="admin__hint">save before switching challenges. new points apply to future solves; players keep points they've already earned.</p>
    </div>
@@ -37,7 +37,7 @@ templ AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Ch
     for _,challenge := range challenges {
      <a class="admin-challenge-link" href={ "/admin/challenges?id="+strconv.FormatUint(uint64(challenge.ID),10)+"&q="+url.QueryEscape(query) } hx-get={ "/admin/challenges?id="+strconv.FormatUint(uint64(challenge.ID),10)+"&q="+url.QueryEscape(query) } hx-target="#admin-challenge-workspace" hx-swap="outerHTML" hx-replace-url="true" aria-current={ strconv.FormatBool(selected!=nil && selected.ID==challenge.ID) }>
       <span>{ challenge.Title }</span>
-      <small>#{ strconv.FormatUint(uint64(challenge.ID),10) } ? { strconv.Itoa(challenge.Points) } pts</small>
+      <small>#{ strconv.FormatUint(uint64(challenge.ID),10) } &#183; { strconv.Itoa(challenge.Points) } pts</small>
      </a>
     }
    </nav>

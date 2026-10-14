@@ -48,7 +48,7 @@ func AdminChallenges(challenges []models.Challenge, selected *models.Challenge, 
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"admin admin--challenge-editor\"><div class=\"admin__header\"><h2>view &amp; edit challenges</h2><a href=\"/secret-candy-vault/\" hx-boost=\"false\">back to the candy vault</a><p>pick a challenge on the left. change what's needed, then hit save :D</p><p class=\"admin__hint\">save before switching challenges. new points apply to future solves; players keep points they've already earned.</p></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"admin admin--challenge-editor\"><div class=\"admin__header\"><h2>view &amp; edit challenges</h2><a class=\"admin-nav-button\" href=\"/secret-candy-vault/\" hx-boost=\"false\">back to the candy vault</a><p>pick a challenge on the left. change what's needed, then hit save :D</p><p class=\"admin__hint\">save before switching challenges. new points apply to future solves; players keep points they've already earned.</p></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -197,14 +197,14 @@ func AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Cha
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, " ? ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 13, " &#183; ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var11 string
 			templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(challenge.Points))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin_challenges.templ`, Line: 40, Col: 96}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `../../../../../../OneDrive/Github Clones/gopher-ctf/ui/pages/admin_challenges.templ`, Line: 40, Col: 101}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 			if templ_7745c5c3_Err != nil {

@@ -7,6 +7,7 @@ import (
 
 templ ChallengeCard(c models.Challenge, completed bool) {
 	<div class="challenge-detail">
+		<a class="challenge-filter" href="/challenges" hx-get="/challenges" hx-target="main" hx-replace-url="true">Back to challenges</a>
 		<h1>{ c.Title }</h1>
 		<p>{ c.Description }</p>
 		<div id="challenge-status">

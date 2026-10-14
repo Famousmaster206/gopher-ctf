@@ -87,6 +87,7 @@ nav a {
 
 button,
 input,
+.admin-nav-button,
 .challenge-filter {
   background: rgba(20, 20, 20, 0.4);
   backdrop-filter: blur(10px);
@@ -790,3 +791,36 @@ main .signup, main .login {
 }
 
 main .signup > *, main .login > * { flex-shrink: 0; }
+
+.admin-nav-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  margin-top: 12px;
+  text-decoration: none;
+  transition: background .2s, border-color .2s;
+}
+.admin-nav-button:hover { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.3); }
+.admin-nav-button:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
+
+.admin--challenge-editor button {
+  min-height: 42px;
+  transition: background .2s, border-color .2s;
+}
+.admin--challenge-editor button:hover {
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.3);
+}
+.admin--challenge-editor button:focus-visible,
+nav.admin-challenge-list a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 3px;
+}
+nav.admin-challenge-list a { border-radius: 13px; transition: background .2s, border-color .2s; }
+nav.admin-challenge-list a[aria-current="true"] {
+  background: rgba(100,220,140,.08);
+  border-color: rgba(100,220,140,.5);
+}
+
+.home-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }

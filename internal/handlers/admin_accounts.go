@@ -70,5 +70,5 @@ func DeleteAccountHandler(c *gin.Context) {
 		}
 		return
 	}
-	c.Redirect(303, "/secret-candy-vault/?deleted=1")
+	c.Redirect(303, "/secret-candy-vault/")
 }

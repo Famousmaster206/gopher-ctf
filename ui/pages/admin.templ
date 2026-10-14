@@ -6,18 +6,15 @@ import (
  "strconv"
 )
 
-templ Admin(users []models.User, deleteTokens map[uint]string, deleted bool) {
+templ Admin(users []models.User, deleteTokens map[uint]string) {
 	@components.Layout("Admin Dashboard") {
 		<div class="admin">
 			<div class="admin__header">
 				<h2>uhh if ur not supposed to be here please leave, thank you :D</h2> <!-- final and strongest defense -->
-                <a href="/admin/challenges" hx-boost="false">view &amp; edit challenges</a>
+                <a class="admin-nav-button" href="/admin/challenges" hx-boost="false">view &amp; edit challenges</a>
 			</div>
 			<section class="admin__card">
                 <h3>candy check</h3>
-                if deleted {
-                    <p class="admin__result" role="status">account deleted</p>
-                }
                 <p>ask for their name + points code. match them here, then check their points :D</p>
                 @AdminPlayers(users, deleteTokens)
             </section>
