@@ -1,0 +1,38 @@
+package pages
+
+import (
+ "strconv"
+ "github.com/openlyfree/gopher-ctf/internal/models"
+ "github.com/openlyfree/gopher-ctf/ui/components"
+)
+
+templ AdminChallenges(challenges []models.Challenge, message string) {
+ @components.Layout("Edit challenges") {
+  <div class="admin">
+   <div class="admin__header">
+    <h2>view &amp; edit challenges</h2>
+    <a href="/secret-candy-vault/" hx-boost="false">back to the candy vault</a>
+    <p>change what's needed, then hit save :D</p>
+    <p class="admin__hint">new points apply to future solves. players keep the points they've already earned.</p>
+   </div>
+   if message != "" {
+    <div class="admin__result" role="status">{ message }</div>
+   }
+   for _, challenge := range challenges {
+    <section class="admin__card">
+     <h3>{ challenge.Title }</h3>
+     <form class="admin__form" method="post" action={ "/admin/challenges/" + strconv.FormatUint(uint64(challenge.ID), 10) } hx-boost="false">
+      <label class="admin__field"><span>name</span><input type="text" name="challenge_name" value={ challenge.Title } required/></label>
+      <label class="admin__field"><span>description</span><textarea name="challenge_description" rows="4" required>{ challenge.Description }</textarea></label>
+      <label class="admin__field"><span>points</span><input type="number" name="challenge_points" min="0" step="1" value={ strconv.Itoa(challenge.Points) } required/></label>
+      <label class="admin__field"><span>flag (include header)</span><input type="text" name="challenge_flag" value={ challenge.Flag } required/></label>
+      <button type="submit">save challenge</button>
+     </form>
+    </section>
+   }
+   if len(challenges) == 0 {
+    <p>no challenges yet. add some in the candy vault!</p>
+   }
+  </div>
+ }
+}
