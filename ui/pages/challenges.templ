@@ -10,7 +10,7 @@ templ Challenges(challenges []models.Challenge, completed map[uint]bool) {
 	<div class="challenges-container">
 		<div class="challenges-grid">
 			for _, c := range challenges {
-				<div class="challenge-card">
+				<div class="challenge-card" data-completed={ strconv.FormatBool(completed[c.ID]) }>
 					<div class="challenge-card-header">
 						<h2>{ c.Title }</h2>
 						<span class="challenge-points">{ strconv.Itoa(int(c.Points)) } pts</span>
