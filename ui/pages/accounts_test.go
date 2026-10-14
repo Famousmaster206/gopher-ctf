@@ -36,7 +36,7 @@ func TestAccountScreens(t *testing.T) {
 	}
 	code := "654321"
 	user := models.User{Username: "CipherHunter042", Score: 100, VerificationCode: &code, Password: "LOGIN_SECRET"}
-	html = renderAccountTest(t, AdminPlayers([]models.User{user}, nil))
+	html = renderAccountTest(t, AdminPlayers([]models.User{user}, nil, nil))
 	if !strings.Contains(html, code) || !strings.Contains(html, "100") || strings.Contains(html, user.Password) {
 		t.Fatal("teacher table must show points and points code, never login credentials")
 	}

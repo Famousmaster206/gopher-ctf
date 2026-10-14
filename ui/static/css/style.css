@@ -833,3 +833,13 @@ nav.admin-challenge-list a[aria-current="true"] {
 a.challenge-card { color: var(--primary); text-decoration: none; }
 a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offset: 4px; }
 .challenge-card > .challenge-btn { display: block; text-align: center; }
+
+.admin button:disabled { opacity: .45; cursor: not-allowed; }
+
+.challenge-hints { display: grid; gap: 12px; }
+.challenge-hints h3 { margin: 0; }
+.challenge-hint { border: 1px solid rgba(255,255,255,.16); border-radius: 13px; background: rgba(20,20,20,.4); }
+.challenge-hint summary { padding: 12px 16px; cursor: pointer; font-weight: 600; }
+.challenge-hint summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 13px; }
+.challenge-hint > p { padding: 0 16px 16px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.challenge-hint[open] { border-color: rgba(255,255,255,.3); }

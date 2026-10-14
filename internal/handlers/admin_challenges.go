@@ -88,6 +88,7 @@ func UpdateChallengeHandler(c *gin.Context) {
 	challenge.Title = strings.TrimSpace(c.PostForm("challenge_name"))
 	challenge.Description = strings.TrimSpace(c.PostForm("challenge_description"))
 	challenge.Flag = strings.TrimSpace(c.PostForm("challenge_flag"))
+	challenge.Hints = strings.TrimSpace(c.PostForm("challenge_hints"))
 	points, err := strconv.Atoi(strings.TrimSpace(c.PostForm("challenge_points")))
 	if err != nil || points < 0 {
 		renderAdminChallenges(c, 400, "points need to be a whole number, zero or more", &challenge)
@@ -99,7 +100,7 @@ func UpdateChallengeHandler(c *gin.Context) {
 		return
 	}
 	result := shared.DB.Model(&models.Challenge{}).Where("id = ?", id).Updates(map[string]interface{}{
-		"title": challenge.Title, "description": challenge.Description, "points": challenge.Points, "flag": challenge.Flag,
+		"title": challenge.Title, "description": challenge.Description, "points": challenge.Points, "flag": challenge.Flag, "hints": challenge.Hints,
 	})
 	if result.Error != nil {
 		_ = c.Error(result.Error)

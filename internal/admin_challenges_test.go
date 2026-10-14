@@ -130,7 +130,7 @@ func TestPostgresChallengeEditor(t *testing.T) {
 		t.Fatal("missing selection accepted")
 	}
 	path := fmt.Sprintf("/admin/challenges/%d", challenge.ID)
-	values := url.Values{"challenge_name": {" Updated "}, "challenge_description": {"new\ndescription"}, "challenge_points": {"0"}, "challenge_flag": {" flag{new} "}}
+	values := url.Values{"challenge_name": {" Updated "}, "challenge_description": {"new\ndescription"}, "challenge_points": {"0"}, "challenge_flag": {" flag{new} "}, "challenge_hints": {"try decoding it\nlook at the first letter"}}
 	w = request("POST", path, values)
 	if w.Code != 303 || w.Header().Get("Location") != "/admin/challenges?saved=1&id="+fmt.Sprint(challenge.ID) {
 		t.Fatalf("save: %d %s", w.Code, w.Body.String())
@@ -138,7 +138,7 @@ func TestPostgresChallengeEditor(t *testing.T) {
 	if err = db.First(&challenge, challenge.ID).Error; err != nil {
 		t.Fatal(err)
 	}
-	if challenge.Title != "Updated" || challenge.Description != "new\ndescription" || challenge.Points != 0 || challenge.Flag != "flag{new}" {
+	if challenge.Title != "Updated" || challenge.Description != "new\ndescription" || challenge.Points != 0 || challenge.Flag != "flag{new}" || len(challenge.HintList()) != 2 {
 		t.Fatalf("incorrect saved challenge: %+v", challenge)
 	}
 	db.First(&user, user.ID)
@@ -168,4 +168,28 @@ func TestPostgresChallengeEditor(t *testing.T) {
 	if w = request("POST", "/admin/challenges/999999", values); w.Code != 404 {
 		t.Fatal("missing challenge was accepted")
 	}
+	values.Set("challenge_flag", "flag{new}")
+	values.Set("challenge_points", "0")
+	values.Set("challenge_hints", "")
+	if w = request("POST", path, values); w.Code != 303 {
+		t.Fatal("clearing hints failed")
+	}
+	db.First(&challenge, challenge.ID)
+	if challenge.Hints != "" {
+		t.Fatal("old hints were not cleared")
+	}
+	values.Set("challenge_name", "Hinted")
+	values.Set("challenge_hints", "first hint\nsecond hint")
+	if w = request("POST", "/secret-candy-vault/challenge", values); w.Code != 200 {
+		t.Fatal("creating a challenge with hints failed")
+	}
+	var hinted models.Challenge
+	if err = db.Where("title = ?", "Hinted").First(&hinted).Error; err != nil || len(hinted.HintList()) != 2 {
+		t.Fatal("created hints were not persisted")
+	}
+	w = request("GET", fmt.Sprintf("/challenges/%d", hinted.ID), nil)
+	if w.Code != 200 || !strings.Contains(w.Body.String(), "first hint") || !strings.Contains(w.Body.String(), "(free)") {
+		t.Fatal("saved hints are not visible on challenge pages")
+	}
+
 }

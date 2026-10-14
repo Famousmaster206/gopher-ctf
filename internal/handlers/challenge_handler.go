@@ -202,6 +202,7 @@ func CreateChallengeHandler(c *gin.Context) {
 		Description: description,
 		Points:      points,
 		Flag:        flag,
+		Hints:       strings.TrimSpace(c.PostForm("challenge_hints")),
 	}
 
 	if err := shared.DB.Create(&challenge).Error; err != nil {

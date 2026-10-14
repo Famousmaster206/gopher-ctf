@@ -4,9 +4,10 @@ import (
  "github.com/openlyfree/gopher-ctf/ui/components"
  "github.com/openlyfree/gopher-ctf/internal/models"
  "strconv"
+ "github.com/openlyfree/gopher-ctf/internal/shared"
 )
 
-templ Admin(users []models.User, deleteTokens map[uint]string) {
+templ Admin(users []models.User, deleteTokens map[uint]string, candyTokens map[uint]string) {
 	@components.Layout("Admin Dashboard") {
 		<div class="admin">
 			<div class="admin__header">
@@ -16,8 +17,8 @@ templ Admin(users []models.User, deleteTokens map[uint]string) {
 			</div>
 			<section class="admin__card">
                 <h3>candy check</h3>
-                <p>ask for their name + points code. match them here, then check their points :D</p>
-                @AdminPlayers(users, deleteTokens)
+                <p>ask for their name + points code. match them here, then check their points :D { strconv.Itoa(shared.CandyRate()) } points = 1 candy.</p>
+                @AdminPlayers(users, deleteTokens, candyTokens)
             </section>
             <div class="admin__grid">
 
@@ -37,10 +38,13 @@ templ Admin(users []models.User, deleteTokens map[uint]string) {
 }
 
 
-templ AdminPlayers(users []models.User, deleteTokens map[uint]string) {
+templ AdminPlayers(users []models.User, deleteTokens map[uint]string, candyTokens map[uint]string, message ...string) {
  <div id="admin-players" class="scoreboard-table-wrapper" hx-get="/secret-candy-vault/players" hx-trigger="every 10s" hx-swap="outerHTML">
+  if len(message)>0 && message[0]!="" {
+   <p class="admin__result" role="alert">{ message[0] }</p>
+  }
   <table class="scoreboard-table">
-   <thead><tr><th>username</th><th>points</th><th>points code</th><th>account</th></tr></thead>
+   <thead><tr><th>username</th><th>points</th><th>points code</th><th>candy owed</th><th>candy</th><th>account</th></tr></thead>
    <tbody>
     for _, user := range users {
      <tr><td>{ user.Username }</td><td>{ strconv.Itoa(user.Score) }</td><td>
@@ -48,6 +52,16 @@ templ AdminPlayers(users []models.User, deleteTokens map[uint]string) {
        <code>{ *user.VerificationCode }</code>
       } else {
        <span>old account ? no code</span>
+      }
+     </td><td>{ strconv.Itoa(user.CandyOwed(shared.CandyRate())) }</td><td>
+      if user.CandyOwed(shared.CandyRate())>0 {
+       <form method="post" action={ "/admin/accounts/"+strconv.FormatUint(uint64(user.ID),10)+"/candy" } hx-post={ "/admin/accounts/"+strconv.FormatUint(uint64(user.ID),10)+"/candy" } hx-target="#admin-players" hx-swap="outerHTML" hx-disabled-elt="find button" hx-sync="this:drop">
+        <input type="hidden" name="candies_given" value={ strconv.Itoa(user.CandiesGiven) }/>
+        <input type="hidden" name="candy_token" value={ candyTokens[user.ID] }/>
+        <button type="submit">give candy</button>
+       </form>
+      } else {
+       <button type="button" disabled>give candy</button>
       }
      </td><td>
       <form method="post" action={ "/admin/accounts/"+strconv.FormatUint(uint64(user.ID),10)+"/delete" } hx-boost="false" data-username={ user.Username } onsubmit="return confirm('delete ' + this.dataset.username + '? their points will be removed and they will be signed out.');">

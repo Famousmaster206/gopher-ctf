@@ -18,9 +18,13 @@ var errAccountChanged = errors.New("account changed")
 
 // The confirmation token is bound to this admin cookie and the selected account.
 func accountDeleteToken(c *gin.Context, userID uint) string {
+	return accountActionToken(c, userID, "delete-account")
+}
+
+func accountActionToken(c *gin.Context, userID uint, action string) string {
 	cookie, _ := c.Cookie("secret_candy_vault_access")
 	mac := hmac.New(sha256.New, []byte(shared.Config.Key))
-	mac.Write([]byte("delete-account:" + strconv.FormatUint(uint64(userID), 10) + ":" + cookie))
+	mac.Write([]byte(action + ":" + strconv.FormatUint(uint64(userID), 10) + ":" + cookie))
 	return hex.EncodeToString(mac.Sum(nil))
 }
 

@@ -43,7 +43,9 @@ templ AdminAddChallenge() {
 							<span>flag(include header)</span>
 							<input type="text" name="challenge_flag" placeholder="flag{this_is_a_flag}" required/>
 						</label>
-						<button type="submit">Upload challenge</button>
+						<label class="admin__field"><span>hints (optional, one per line)</span><textarea name="challenge_hints" rows="4" placeholder="a little nudge in the right direction"></textarea></label>
+                        <p class="admin__hint">players can open hints for free. no points lost.</p>
+                        <button type="submit">Upload challenge</button>
 					</form>
 					<div id="upload-result" class="admin__result"></div>
 				</section>
