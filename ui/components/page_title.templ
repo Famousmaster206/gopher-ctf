@@ -1,0 +1,8 @@
+package components
+
+import "github.com/openlyfree/gopher-ctf/internal/shared"
+
+// HTMX reads titles in fragment responses and updates the browser tab.
+templ PageTitle(title string) {
+ <title>{ title } | { shared.Config.Name }</title>
+}
