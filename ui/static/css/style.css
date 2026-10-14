@@ -742,3 +742,51 @@ nav.admin-challenge-list a:hover, nav.admin-challenge-list a[aria-current="true"
 @media (max-width: 480px) {
   .challenge-toolbar .challenge-search { flex-basis: 100%; }
 }
+
+/* Keep account panels below navigation and inside the visible screen. */
+body:has(main .signup), body:has(main .login) {
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+}
+body:has(main .signup) > nav, body:has(main .login) > nav { flex: 0 0 auto; }
+main:has(div.signup), main:has(div.login) {
+  position: static;
+  left: auto;
+  top: auto;
+  transform: none;
+  width: 100%;
+  flex: 1 1 0;
+  min-height: 0;
+  margin: 0;
+  padding: 16px;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  place-items: center;
+  overflow: hidden;
+}
+main .signup, main .login {
+  width: min(520px, 100%);
+  max-height: 100%;
+  margin: 0;
+  padding: 24px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  overflow-wrap: anywhere;
+}
+.signup .account-name { font-size: 1.25rem; }
+.signup .account-codes { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.signup .account-codes > div { border-color: rgba(255,255,255,.16); background: rgba(255,255,255,.03); }
+.signup .account-code { margin: 8px 0; font-size: 1.75rem; letter-spacing: .08em; }
+.signup .account-codes p:not(.account-code), .signup .account-hint { font-size: .85rem; line-height: 1.45; }
+.signup .account-continue { flex-shrink: 0; min-height: 42px; box-sizing: border-box; }
+@media (max-width: 480px) {
+  .signup .account-codes { grid-template-columns: minmax(0,1fr); }
+  main .signup, main .login { padding: 20px; }
+}
+
+main .signup > *, main .login > * { flex-shrink: 0; }
