@@ -25,13 +25,14 @@ templ AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Ch
  <div id="admin-challenge-workspace" class="admin-challenge-workspace">
   <aside id="admin-challenge-sidebar" class="admin__card admin-challenge-sidebar" aria-label="Challenges">
    <h3>challenges</h3>
-   <form class="admin__form" method="get" action="/admin/challenges" hx-get="/admin/challenges" hx-target="#admin-challenge-sidebar" hx-select="#admin-challenge-sidebar" hx-swap="outerHTML" hx-replace-url="true">
+   <form class="admin__form" method="get" action="/admin/challenges" hx-get="/admin/challenges" hx-trigger="submit, input delay:200ms" hx-sync="this:replace" hx-target="#admin-challenge-search-results" hx-select="#admin-challenge-search-results" hx-swap="outerHTML" hx-replace-url="true">
     if selected != nil {
      <input type="hidden" name="id" value={ strconv.FormatUint(uint64(selected.ID),10) }/>
     }
-    <label class="admin__field"><span>find a challenge</span><input type="search" name="q" value={ query } placeholder="challenge name"/></label>
+    <label class="admin__field"><span>find a challenge</span><input id="admin-challenge-search-input" type="search" name="q" value={ query } placeholder="challenge name"/></label>
     <button type="submit">find</button>
    </form>
+   <div id="admin-challenge-search-results">
    <nav class="admin-challenge-list" aria-label="Choose a challenge">
     for _,challenge := range challenges {
      <a class="admin-challenge-link" href={ "/admin/challenges?id="+strconv.FormatUint(uint64(challenge.ID),10)+"&q="+url.QueryEscape(query) } hx-get={ "/admin/challenges?id="+strconv.FormatUint(uint64(challenge.ID),10)+"&q="+url.QueryEscape(query) } hx-target="#admin-challenge-workspace" hx-swap="outerHTML" hx-replace-url="true" aria-current={ strconv.FormatBool(selected!=nil && selected.ID==challenge.ID) }>
@@ -47,6 +48,7 @@ templ AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Ch
      <p>no challenges yet. add some in the candy vault!</p>
     }
    }
+   </div>
   </aside>
   <section class="admin__card admin-challenge-editor">
    if message!="" {

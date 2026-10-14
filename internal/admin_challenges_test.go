@@ -99,7 +99,7 @@ func TestPostgresChallengeEditor(t *testing.T) {
 	if w.Code != 200 || !strings.Contains(w.Body.String(), "Original") || !strings.Contains(w.Body.String(), "flag{old}") || w.Header().Get("Cache-Control") != "no-store" {
 		t.Fatal("editor did not list existing challenges")
 	}
-	if !strings.Contains(w.Body.String(), `hx-target="#admin-challenge-sidebar"`) || !strings.Contains(w.Body.String(), `hx-select="#admin-challenge-sidebar"`) {
+	if !strings.Contains(w.Body.String(), `hx-target="#admin-challenge-search-results"`) || !strings.Contains(w.Body.String(), `hx-select="#admin-challenge-search-results"`) {
 		t.Fatal("search must only replace the sidebar, preserving editor inputs")
 	}
 	if strings.Count(w.Body.String(), `name="challenge_flag"`) != 1 || strings.Contains(w.Body.String(), "flag{second}") {

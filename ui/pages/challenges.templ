@@ -10,20 +10,20 @@ import (
 templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCompleted bool, query string) {
 	<div class="challenges-container">
         <div class="challenge-toolbar">
-        <form class="challenge-search" method="get" action="/challenges" hx-get="/challenges" hx-target="main" hx-replace-url="true">
-            <label class="panel__field"><span>find a challenge</span><input type="search" name="q" value={ query } placeholder="name or description"/></label>
+        <form class="challenge-search" method="get" action="/challenges" hx-get="/challenges" hx-trigger="submit, input delay:200ms" hx-sync="this:replace" hx-target="#challenge-results" hx-select="#challenge-results" hx-swap="outerHTML" hx-replace-url="true">
+            <label class="panel__field"><span>find a challenge</span><input id="challenge-search-input" type="search" name="q" value={ query } placeholder="name or description"/></label>
             if hideCompleted {
                 <input type="hidden" name="hide_completed" value="1"/>
             }
             <button type="submit">find</button>
         </form>
         if hideCompleted {
-            <a class="challenge-filter" href={ "/challenges?q="+url.QueryEscape(query) } hx-get={ "/challenges?q="+url.QueryEscape(query) } hx-target="main" hx-replace-url="true">show completed</a>
+            <a class="challenge-filter" href={ "/challenges?q="+url.QueryEscape(query) } hx-get="/challenges" hx-include="#challenge-search-input" hx-target="main" hx-replace-url="true">show completed</a>
         } else {
-            <a class="challenge-filter" href={ "/challenges?hide_completed=1&q="+url.QueryEscape(query) } hx-get={ "/challenges?hide_completed=1&q="+url.QueryEscape(query) } hx-target="main" hx-replace-url="true">hide completed</a>
+            <a class="challenge-filter" href={ "/challenges?hide_completed=1&q="+url.QueryEscape(query) } hx-get="/challenges?hide_completed=1" hx-include="#challenge-search-input" hx-target="main" hx-replace-url="true">hide completed</a>
         }
         </div>
-		<div class="challenges-grid">
+		<div id="challenge-results" class="challenges-grid">
 			for _, c := range challenges {
 				<div class="challenge-card" data-completed={ strconv.FormatBool(completed[c.ID]) }>
 					<div class="challenge-card-header">
