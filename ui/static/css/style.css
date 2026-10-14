@@ -617,6 +617,8 @@ div.admin {
   font-family: "Cascadia Code", Monospaced, monospace;
   font-size: 15px;
   resize: vertical;
+}
+
 /* Account cards use the same panels as signup and login. */
 .account-name { font-size: 1.5rem; font-weight: bold; overflow-wrap: anywhere; }
 .account-codes { display: grid; gap: 1rem; }
@@ -664,9 +666,13 @@ main:has(div.signup) {
   font-weight: bold;
 }
 
-.challenge-card[data-completed="true"],
+.challenge-card[data-completed="true"] {
+  border-color: #64dc8c;
+  box-shadow: 0 0 0 1px rgba(100, 220, 140, .3), 0 0 24px rgba(60, 220, 120, .3);
+}
 .challenge-card[data-completed="true"]:hover {
-  border: 2px solid #64dc8c;
+  border-color: #9aefb3;
+  box-shadow: 0 0 0 1px rgba(100, 220, 140, .5), 0 0 32px rgba(60, 220, 120, .45);
 }
 
 .challenges-container { display: flex; flex-direction: column; gap: 16px; width: 100%; }
@@ -704,3 +710,35 @@ nav.admin-challenge-list a:hover, nav.admin-challenge-list a[aria-current="true"
 .challenge-search { display: flex; align-items: end; gap: 12px; max-width: 640px; width: 100%; }
 .challenge-search .panel__field { flex: 1; min-width: 0; }
 .challenge-search input { width: 100%; }
+
+/* Keep completed and unfinished cards identical in size. */
+.challenge-card { height: 224px; min-width: 0; box-sizing: border-box; }
+.challenge-card .challenge-card-header { flex-direction: row; }
+.challenge-card-header h2 {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.challenge-card > .challenge-completed { margin: 0; align-self: flex-start; }
+.challenge-card > .challenge-btn { margin-top: auto; flex-shrink: 0; }
+
+/* Let toolbar rows grow naturally; never squeeze controls into the cards. */
+.challenges-container {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 24px;
+  box-sizing: border-box;
+}
+.challenge-toolbar { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px; }
+.challenge-toolbar .challenge-search { flex: 1 1 320px; margin: 0; min-width: 0; }
+.challenge-toolbar .challenge-search button,
+.challenge-toolbar .challenge-filter { flex-shrink: 0; min-height: 42px; margin: 0; line-height: 1.25; white-space: nowrap; }
+.challenge-toolbar .challenge-filter { align-self: flex-end; }
+.challenge-toolbar input { min-height: 42px; }
+@media (max-width: 480px) {
+  .challenge-toolbar .challenge-search { flex-basis: 100%; }
+}

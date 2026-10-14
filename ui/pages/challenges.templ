@@ -9,6 +9,7 @@ import (
 
 templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCompleted bool, query string) {
 	<div class="challenges-container">
+        <div class="challenge-toolbar">
         <form class="challenge-search" method="get" action="/challenges" hx-get="/challenges" hx-target="main" hx-replace-url="true">
             <label class="panel__field"><span>find a challenge</span><input type="search" name="q" value={ query } placeholder="name or description"/></label>
             if hideCompleted {
@@ -21,11 +22,12 @@ templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCom
         } else {
             <a class="challenge-filter" href={ "/challenges?hide_completed=1&q="+url.QueryEscape(query) } hx-get={ "/challenges?hide_completed=1&q="+url.QueryEscape(query) } hx-target="main" hx-replace-url="true">hide completed</a>
         }
+        </div>
 		<div class="challenges-grid">
 			for _, c := range challenges {
 				<div class="challenge-card" data-completed={ strconv.FormatBool(completed[c.ID]) }>
 					<div class="challenge-card-header">
-						<h2>{ c.Title }</h2>
+						<h2 title={ c.Title }>{ c.Title }</h2>
 						<span class="challenge-points">{ strconv.Itoa(int(c.Points)) } pts</span>
 					</div>
 					if completed[c.ID] {
