@@ -1,15 +1,24 @@
 package pages
 
-import "github.com/openlyfree/gopher-ctf/ui/components"
+import (
+ "github.com/openlyfree/gopher-ctf/ui/components"
+ "github.com/openlyfree/gopher-ctf/internal/models"
+ "strconv"
+)
 
-templ Admin() {
+templ Admin(users []models.User) {
 	@components.Layout("Admin Dashboard") {
 		<div class="admin">
 			<div class="admin__header">
 				<h2>uhh if ur not supposed to be here please leave, thank you :D</h2> <!-- final and strongest defense -->
                 <a href="/admin/challenges" hx-boost="false">view &amp; edit challenges</a>
 			</div>
-			<div class="admin__grid">
+			<section class="admin__card">
+                <h3>candy check</h3>
+                <p>ask for their name + points code. match them here, then check their points :D</p>
+                @AdminPlayers(users)
+            </section>
+            <div class="admin__grid">
 				<section class="admin__card">
 					<div class="admin__card-header">
 						<h3>Add challenge</h3>
@@ -58,4 +67,27 @@ templ Admin() {
 			</div>
 		</div>
 	}
+}
+
+
+templ AdminPlayers(users []models.User) {
+ <div id="admin-players" class="scoreboard-table-wrapper" hx-get="/secret-candy-vault/players" hx-trigger="every 10s" hx-swap="outerHTML">
+  <table class="scoreboard-table">
+   <thead><tr><th>username</th><th>points</th><th>points code</th></tr></thead>
+   <tbody>
+    for _, user := range users {
+     <tr><td>{ user.Username }</td><td>{ strconv.Itoa(user.Score) }</td><td>
+      if user.VerificationCode != nil {
+       <code>{ *user.VerificationCode }</code>
+      } else {
+       <span>old account ? no code</span>
+      }
+     </td></tr>
+    }
+   </tbody>
+  </table>
+  if len(users) == 0 {
+   <p>no players yet. where's everyone at?</p>
+  }
+ </div>
 }

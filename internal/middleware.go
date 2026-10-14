@@ -3,6 +3,7 @@ package internal
 import (
 	"context"
 	"log"
+	"net/http"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,12 @@ import (
 
 func UserLoader() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if val := sessions.Default(c).Get("username"); val != nil {
+		session := sessions.Default(c)
+		session.Options(sessions.Options{
+			Path: "/", MaxAge: 86400 * 30, HttpOnly: true, SameSite: http.SameSiteLaxMode,
+			Secure: c.Request.TLS != nil || c.GetHeader("X-Forwarded-Proto") == "https",
+		})
+		if val := session.Get("username"); val != nil {
 			c.Request = c.Request.WithContext(context.WithValue(c.Request.Context(), "username", val))
 		}
 		c.Next()

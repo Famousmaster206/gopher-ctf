@@ -1,27 +1,48 @@
 package pages
 
-import "github.com/openlyfree/gopher-ctf/ui/components"
+import (
+ "strconv"
+ "github.com/openlyfree/gopher-ctf/ui/components"
+)
 
-templ Signup() {
-	<div class="signup">
-		<h2>Sign up</h2>
-		<form class="panel__form" hx-post="/register" hx-target="#error-msg">
-			<label class="panel__field">
-				<span>username</span>
-				<input type="text" name="username" placeholder="Username" required/>
-			</label>
-			<label class="panel__field">
-				<span>password</span>
-				<input type="password" name="password" placeholder="Password" required/>
-			</label>
-			<button type="submit">Sign up</button>
-		</form>
-		<div id="error-msg" class="panel__result"></div>
-	</div>
+templ Signup(username string, token string, remaining int) {
+ <div class="signup" id="signup-panel">
+  <h2>Join the CTF</h2>
+  <p>here's your name :D</p>
+  <p class="account-name">{ username }</p>
+  if remaining > 0 {
+   <form hx-post="/register/reroll" hx-target="#signup-panel" hx-swap="outerHTML" hx-disabled-elt="#signup-panel button">
+    <input type="hidden" name="signup_token" value={ token }/>
+    <button type="submit">new name pls</button>
+   </form>
+   <p class="account-hint">{ strconv.Itoa(remaining) } name changes left.</p>
+  } else {
+   <p class="account-hint">that's all 3 changes. this one's yours now :D</p>
+  }
+  <form class="panel__form" hx-post="/register" hx-target="#signup-panel" hx-swap="outerHTML" hx-disabled-elt="#signup-panel button">
+   <input type="hidden" name="signup_token" value={ token }/>
+   <button type="submit">keep this name &amp; join</button>
+  </form>
+  <p class="account-hint">you'll get a login code and a points code. you'll need the points code to get candy.</p>
+ </div>
 }
 
-templ SignupPage() {
-	@components.Layout("Join") {
-		@Signup()
-	}
+templ SignupPage(username string, token string, remaining int) {
+ @components.Layout("Join") {
+  @Signup(username, token, remaining)
+ }
+}
+
+templ AccountCreated(username string, loginCode string, pointsCode string) {
+ <div class="signup">
+  <h2>you're in :D</h2>
+  <p class="account-name">{ username }</p>
+  <div class="account-codes">
+   <div><h3>login code</h3><p class="account-code">{ loginCode }</p><p>use your name + this code to log in. keep it to yourself.</p></div>
+   <div><h3>points code</h3><p class="account-code">{ pointsCode }</p><p>give your name + this code to your teacher so they can check your points.</p></div>
+  </div>
+  <p><strong>save both codes now. you need your points code to get candy!</strong></p>
+  <p class="account-hint">write them down or take a screenshot. your login code is only shown here once. your points code is also in "My codes" when you're logged in.</p>
+  <a class="account-continue" href="/" hx-boost="false">saved them. let's go</a>
+ </div>
 }

@@ -28,6 +28,9 @@ func InitDB() *gorm.DB {
 	if err := db.AutoMigrate(&models.User{}); err != nil {
 		log.Panicln(err)
 	}
+	if err := db.AutoMigrate(&models.SignupDraft{}); err != nil {
+		log.Panicln(err)
+	}
 	if err := db.AutoMigrate(&models.Challenge{}); err != nil {
 		log.Panicln(err)
 	}
