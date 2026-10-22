@@ -370,50 +370,35 @@ func AdminChallengeVisibility(public bool, token string) templ.Component {
 			templ_7745c5c3_Var18 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<section class=\"admin__card challenge-release\" aria-labelledby=\"challenge-release-title\"><div><span class=\"release-label\">event controls</span><h3 id=\"challenge-release-title\">Challenges public</h3>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		if public {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "<p>All challenges are live. Players can browse, open hints, and submit flags.</p>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "<p>All challenges are hidden. Players will see ?Challenges coming when the event starts.?</p>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "</div><form method=\"post\" action=\"/secret-candy-vault/challenge-visibility\" hx-boost=\"false\"><input type=\"hidden\" name=\"visibility_token\" value=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, "<section class=\"admin__card\" aria-labelledby=\"challenge-release-title\"><div class=\"admin__card-header\"><h3 id=\"challenge-release-title\">challenges</h3></div><form class=\"admin__actions\" method=\"post\" action=\"/secret-candy-vault/challenge-visibility\" hx-boost=\"false\"><input type=\"hidden\" name=\"visibility_token\" value=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var19 string
 		templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(token)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/pages/admin.templ`, Line: 96, Col: 61}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `ui/pages/admin.templ`, Line: 90, Col: 61}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "\"> ")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\"> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if public {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "<input type=\"hidden\" name=\"challenges_public\" value=\"false\"> <button class=\"release-switch\" type=\"submit\" role=\"switch\" aria-checked=\"true\" aria-label=\"Challenges public\"><span class=\"release-switch-track\"><span></span></span>Public</button>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "<input type=\"hidden\" name=\"challenges_public\" value=\"false\"> <button type=\"submit\">hide challenges</button>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "<input type=\"hidden\" name=\"challenges_public\" value=\"true\"> <button class=\"release-switch\" type=\"submit\" role=\"switch\" aria-checked=\"false\" aria-label=\"Challenges public\"><span class=\"release-switch-track\"><span></span></span>Hidden</button>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "<input type=\"hidden\" name=\"challenges_public\" value=\"true\"> <button type=\"submit\">make challenges public</button>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "</form></section>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "</form></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

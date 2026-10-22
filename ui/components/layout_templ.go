@@ -57,7 +57,7 @@ func Layout(title string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</title><script src=\"https://unpkg.com/htmx.org@1.9.10\"></script><link rel=\"stylesheet\" href=\"/static/css/style.css?v=1.0.19\"><script>\r\n            // HTMX does not swap error responses by default. Keep form feedback visible.\r\n            document.addEventListener('htmx:beforeSwap', function (event) {\r\n                const target = event.detail.target;\r\n                if (target && ['flag-result', 'upload-result'].includes(target.id)) {\r\n                    event.detail.shouldSwap = true;\r\n                    event.detail.isError = false;\r\n                }\r\n            });\r\n        </script></head><body hx-boost=\"true\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</title><script src=\"https://unpkg.com/htmx.org@1.9.10\"></script><link rel=\"stylesheet\" href=\"/static/css/style.css?v=1.0.20\"><script>\r\n            // HTMX does not swap error responses by default. Keep form feedback visible.\r\n            document.addEventListener('htmx:beforeSwap', function (event) {\r\n                const target = event.detail.target;\r\n                if (target && ['flag-result', 'upload-result'].includes(target.id)) {\r\n                    event.detail.shouldSwap = true;\r\n                    event.detail.isError = false;\r\n                }\r\n            });\r\n        </script></head><body hx-boost=\"true\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
