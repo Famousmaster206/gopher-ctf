@@ -95,7 +95,10 @@ func TestPostgresScoring(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer db.Exec("DROP SCHEMA " + namespace + " CASCADE")
-	if err = db.AutoMigrate(&models.User{}, &models.Challenge{}, &models.ChallengeCompletion{}); err != nil {
+	if err = db.AutoMigrate(&models.EventSettings{}, &models.User{}, &models.Challenge{}, &models.ChallengeCompletion{}); err != nil {
+		t.Fatal(err)
+	}
+	if err = db.Create(&models.EventSettings{ID: 1, ChallengesPublic: true}).Error; err != nil {
 		t.Fatal(err)
 	}
 	oldDB := shared.DB
@@ -210,6 +213,22 @@ func TestPostgresScoring(t *testing.T) {
 		}
 	}
 	id := fmt.Sprint(challenge.ID)
+	if err = db.Model(&models.EventSettings{}).Where("id = ?", 1).Update("challenges_public", false).Error; err != nil {
+		t.Fatal(err)
+	}
+	if w := requestFlag(other.ID, id, "flag{x}"); w.Code != 403 {
+		t.Fatalf("hidden challenge accepted submission: %d", w.Code)
+	}
+	if err = db.First(&other, other.ID).Error; err != nil {
+		t.Fatal(err)
+	}
+	if other.Score != 0 || other.LastFlagAttempt != nil {
+		t.Fatal("hidden submission changed player state")
+	}
+	if err = db.Model(&models.EventSettings{}).Where("id = ?", 1).Update("challenges_public", true).Error; err != nil {
+		t.Fatal(err)
+	}
+
 	if w := requestFlagWithHTMX(other.ID, id, " \nflag{x}\t ", true); w.Code != 200 {
 		t.Fatalf("trimmed success: %d %s", w.Code, w.Body.String())
 	} else if !strings.Contains(w.Body.String(), "completed! 🔥") || !strings.Contains(w.Body.String(), `hx-swap-oob="outerHTML"`) {

@@ -30,6 +30,11 @@ func editorRouter() *gin.Engine {
 func TestChallengeEditorRequiresAdmin(t *testing.T) {
 	r := editorRouter()
 	w := httptest.NewRecorder()
+	r.ServeHTTP(w, httptest.NewRequest("POST", "/secret-candy-vault/challenge-visibility", nil))
+	if w.Code != 401 {
+		t.Fatal("visibility toggle must require admin login")
+	}
+	w = httptest.NewRecorder()
 	r.ServeHTTP(w, httptest.NewRequest("GET", "/admin/challenges/new", nil))
 	if w.Code != 401 {
 		t.Fatal("challenge creation page must require admin login")
@@ -67,7 +72,7 @@ func TestPostgresChallengeEditor(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer db.Exec("DROP SCHEMA " + namespace + " CASCADE")
-	if err = db.AutoMigrate(&models.Challenge{}, &models.User{}); err != nil {
+	if err = db.AutoMigrate(&models.EventSettings{}, &models.Challenge{}, &models.User{}); err != nil {
 		t.Fatal(err)
 	}
 	oldDB, oldConfig := shared.DB, shared.Config
@@ -99,6 +104,38 @@ func TestPostgresChallengeEditor(t *testing.T) {
 		w := httptest.NewRecorder()
 		r.ServeHTTP(w, req)
 		return w
+	}
+
+	// Hidden is the default, including direct links and HTMX navigation.
+	for _, path := range []string{"/challenges", "/challenges/" + fmt.Sprint(challenge.ID)} {
+		for _, hx := range []bool{false, true} {
+			req := httptest.NewRequest("GET", path, nil)
+			if hx {
+				req.Header.Set("HX-Request", "true")
+			}
+			w := httptest.NewRecorder()
+			r.ServeHTTP(w, req)
+			if w.Code != 200 || !strings.Contains(w.Body.String(), "Challenges coming when the event starts.") || strings.Contains(w.Body.String(), "flag{old}") || strings.Contains(w.Body.String(), "Old description") {
+				t.Fatalf("hidden challenge leaked: %s", w.Body.String())
+			}
+		}
+	}
+	if w := request("POST", "/secret-candy-vault/challenge-visibility", url.Values{"challenges_public": {"true"}}); w.Code != 403 {
+		t.Fatal("visibility change needs CSRF token")
+	}
+	page := request("GET", "/secret-candy-vault/", nil).Body.String()
+	const prefix = `name="visibility_token" value="`
+	_, rest, found := strings.Cut(page, prefix)
+	if !found {
+		t.Fatalf("missing visibility toggle: %s", page)
+	}
+	csrf, _, _ := strings.Cut(rest, `"`)
+	for _, value := range []string{"true", "false", "true"} {
+		w := request("POST", "/secret-candy-vault/challenge-visibility", url.Values{"challenges_public": {value}, "visibility_token": {csrf}})
+		public, err := shared.ChallengesPublic()
+		if w.Code != 303 || err != nil || public != (value == "true") {
+			t.Fatalf("visibility %s: %d %v", value, w.Code, err)
+		}
 	}
 	w := request("GET", "/admin/challenges", nil)
 	if w.Code != 200 || !strings.Contains(w.Body.String(), "Original") || !strings.Contains(w.Body.String(), "flag{old}") || w.Header().Get("Cache-Control") != "no-store" {

@@ -7,7 +7,7 @@ import (
  "github.com/openlyfree/gopher-ctf/internal/shared"
 )
 
-templ Admin(users []models.User, deleteTokens map[uint]string, candyTokens map[uint]string) {
+templ Admin(users []models.User, deleteTokens map[uint]string, candyTokens map[uint]string, public bool, visibilityToken string) {
 	@components.Layout("Admin Dashboard") {
 		<div class="admin">
 			<div class="admin__header">
@@ -15,6 +15,7 @@ templ Admin(users []models.User, deleteTokens map[uint]string, candyTokens map[u
                 <a class="admin-nav-button" href="/admin/challenges/new" hx-boost="false">add challenge</a>
                 <a class="admin-nav-button" href="/admin/challenges" hx-boost="false">view &amp; edit challenges</a>
 			</div>
+			@AdminChallengeVisibility(public, visibilityToken)
 			<section class="admin__card">
                 <h3>candy check</h3>
                 <p>ask for their name + points code. match them here, then check their points :D { strconv.Itoa(shared.CandyRate()) } points = 1 candy.</p>
@@ -77,4 +78,29 @@ templ AdminPlayers(users []models.User, deleteTokens map[uint]string, candyToken
    <p>no players yet. where's everyone at?</p>
   }
  </div>
+}
+
+
+templ AdminChallengeVisibility(public bool, token string) {
+ <section class="admin__card challenge-release" aria-labelledby="challenge-release-title">
+  <div>
+   <span class="release-label">event controls</span>
+   <h3 id="challenge-release-title">Challenges public</h3>
+   if public {
+    <p>All challenges are live. Players can browse, open hints, and submit flags.</p>
+   } else {
+    <p>All challenges are hidden. Players will see ?Challenges coming when the event starts.?</p>
+   }
+  </div>
+  <form method="post" action="/secret-candy-vault/challenge-visibility" hx-boost="false">
+   <input type="hidden" name="visibility_token" value={ token }/>
+   if public {
+    <input type="hidden" name="challenges_public" value="false"/>
+    <button class="release-switch" type="submit" role="switch" aria-checked="true" aria-label="Challenges public"><span class="release-switch-track"><span></span></span>Public</button>
+   } else {
+    <input type="hidden" name="challenges_public" value="true"/>
+    <button class="release-switch" type="submit" role="switch" aria-checked="false" aria-label="Challenges public"><span class="release-switch-track"><span></span></span>Hidden</button>
+   }
+  </form>
+ </section>
 }

@@ -38,8 +38,14 @@ func adminUsers(c *gin.Context) ([]models.User, bool) {
 	return users, true
 }
 func AdminIndexHandler(c *gin.Context) {
+	public, err := shared.ChallengesPublic()
+	if err != nil {
+		_ = c.Error(err)
+		c.String(500, "Couldn't load challenge availability")
+		return
+	}
 	if users, ok := adminUsers(c); ok {
-		Render(c, 200, pages.Admin(users, accountDeleteTokens(c, users), candyTokens(c, users)))
+		Render(c, 200, pages.Admin(users, accountDeleteTokens(c, users), candyTokens(c, users), public, accountActionToken(c, 0, "challenge-visibility")))
 	}
 }
 func AdminPlayersHandler(c *gin.Context) {

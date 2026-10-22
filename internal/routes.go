@@ -36,6 +36,7 @@ func RegisterRoutes(router *gin.Engine) {
 	admin.GET("/players", handlers.AdminPlayersHandler)
 	admin.POST("/challenge", handlers.CreateChallengeHandler)
 	admin.POST("/reload-config", handlers.ConfigReloadHandler)
+	admin.POST("/challenge-visibility", handlers.ChallengeVisibilityHandler)
 	challengeAdmin := router.Group("/admin")
 	challengeAdmin.Use(AdminAuth())
 	challengeAdmin.GET("/challenges", handlers.AdminChallengesHandler)

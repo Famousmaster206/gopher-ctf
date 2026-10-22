@@ -55,7 +55,7 @@ func TestPostgresCandyRedemption(t *testing.T) {
 		t.Fatal(err)
 	}
 	defer db.Exec("DROP SCHEMA " + namespace + " CASCADE")
-	if err = db.AutoMigrate(&models.User{}); err != nil {
+	if err = db.AutoMigrate(&models.EventSettings{}, &models.User{}); err != nil {
 		t.Fatal(err)
 	}
 	oldDB, oldConfig := shared.DB, shared.Config

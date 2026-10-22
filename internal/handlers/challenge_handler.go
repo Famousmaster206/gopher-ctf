@@ -41,6 +41,9 @@ func SubmitFlagHandler(c *gin.Context) {
 		c.String(400, "Flag is required")
 		return
 	}
+	if !challengesAvailable(c) {
+		return
+	}
 	var challenge models.Challenge
 	if err := shared.DB.First(&challenge, challengeID).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -117,6 +120,9 @@ func GetChallenge(id string) (models.Challenge, error) {
 }
 
 func ChallengeIndividualHandler(c *gin.Context) {
+	if !challengesAvailable(c) {
+		return
+	}
 	c.Header("Cache-Control", "private, no-store")
 	challenge, err := GetChallenge(c.Param("id"))
 	if err != nil {
@@ -149,6 +155,9 @@ func Render(c *gin.Context, status int, cmp templ.Component) {
 }
 
 func ChallengeIndexHandler(c *gin.Context) {
+	if !challengesAvailable(c) {
+		return
+	}
 	c.Header("Cache-Control", "private, no-store")
 	var challenges []models.Challenge
 	if err := shared.DB.Find(&challenges).Error; err != nil {
