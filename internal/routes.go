@@ -1,10 +1,13 @@
 package internal
 
 import (
+	"net/http"
+
 	"github.com/a-h/templ"
 	"github.com/gin-gonic/gin"
 	"github.com/openlyfree/gopher-ctf/internal/handlers"
 	"github.com/openlyfree/gopher-ctf/ui/pages"
+	"github.com/openlyfree/gopher-ctf/ui/static"
 )
 
 func RegisterRoutes(router *gin.Engine) {
@@ -12,7 +15,7 @@ func RegisterRoutes(router *gin.Engine) {
 	if gin.IsDebugging() {
 		staticGroup.Use(NoCache())
 	}
-	staticGroup.Static("/", "./ui/static")
+	staticGroup.StaticFS("/", http.FS(static.Files))
 	router.StaticFile("/favicon.png", "./public/favicon.png")
 	router.StaticFile("/favicon.svg", "./public/favicon.svg")
 	router.Use(UserLoader())
