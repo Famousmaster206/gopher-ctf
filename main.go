@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os" // Import os to read environment variables
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
@@ -16,5 +17,13 @@ func main() {
 	router := gin.Default()
 	router.Use(sessions.Sessions("gopher_session", cookie.NewStore([]byte(shared.Config.Key))))
 	internal.RegisterRoutes(router)
-	log.Fatal(router.Run(":8080"))
+
+	// Vercel dynamically injects a PORT environment variable at runtime
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // Fallback to your local port if running locally
+	}
+
+	log.Printf("Starting server on port %s", port)
+	log.Fatal(router.Run(":" + port))
 }
