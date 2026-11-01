@@ -3,6 +3,7 @@ module github.com/openlyfree/gopher-ctf
 go 1.25
 
 require (
+	cloud.google.com/go/storage v1.70.0
 	github.com/TwiN/go-away v1.8.1
 	github.com/a-h/templ v0.3.1001
 	github.com/gin-contrib/sessions v1.0.4
