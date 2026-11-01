@@ -510,7 +510,8 @@ div.admin {
 
 .challenges-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  grid-auto-flow: row;
   gap: 24px;
   padding: 0;
 }
@@ -725,7 +726,7 @@ nav.admin-challenge-list a:hover, nav.admin-challenge-list a[aria-current="true"
 .challenge-search input { width: 100%; }
 
 /* Keep completed and unfinished cards identical in size. */
-.challenge-card { height: 224px; min-width: 0; box-sizing: border-box; }
+.challenge-card { height: 224px; min-width: 0; width: 100%; box-sizing: border-box; }
 .challenge-card .challenge-card-header { flex-direction: row; }
 .challenge-card-header h2 {
   min-width: 0;
@@ -852,6 +853,17 @@ a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offs
 .challenge-hint { border: 1px solid rgba(255,255,255,.16); border-radius: 13px; background: rgba(20,20,20,.4); }
 .challenge-hint summary { padding: 12px 16px; cursor: pointer; font-weight: 600; }
 .challenge-hint summary:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; border-radius: 13px; }
+
+/* Challenge lists may span multiple rows; let the document scroll normally. */
+body:has(main .challenges-container) {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+main:has(div.challenges-container) {
+  flex: 0 0 auto;
+  min-height: max-content;
+  overflow: visible;
+}
 .challenge-hint > p { padding: 0 16px 16px; white-space: pre-wrap; overflow-wrap: anywhere; }
 .challenge-hint[open] { border-color: rgba(255,255,255,.3); }
 
