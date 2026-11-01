@@ -13,6 +13,7 @@ templ AdminChallenges(challenges []models.Challenge, selected *models.Challenge,
    <div class="admin__header">
     <h2>view &amp; edit challenges</h2>
     <a class="admin-nav-button" href="/secret-candy-vault/" hx-boost="false">back to the candy vault</a>
+    <a class="admin-nav-button" href="/admin/challenges/import" hx-boost="false">bulk import</a>
     <p>pick a challenge on the left. change what's needed, then hit save :D</p>
     <p class="admin__hint">save before switching challenges. new points apply to future solves; players keep points they've already earned.</p>
    </div>
@@ -20,6 +21,7 @@ templ AdminChallenges(challenges []models.Challenge, selected *models.Challenge,
   </div>
  }
 }
+
 
 templ AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Challenge, message string, query string) {
  <div id="admin-challenge-workspace" class="admin-challenge-workspace">

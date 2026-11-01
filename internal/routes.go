@@ -44,6 +44,8 @@ func RegisterRoutes(router *gin.Engine) {
 	challengeAdmin.Use(AdminAuth())
 	challengeAdmin.GET("/challenges", handlers.AdminChallengesHandler)
 	challengeAdmin.GET("/challenges/new", handlers.AdminAddChallengeHandler)
+	challengeAdmin.GET("/challenges/import", handlers.AdminImportPageHandler)
+	challengeAdmin.POST("/challenges/import", handlers.AdminImportHandler)
 	challengeAdmin.POST("/challenges/:id", handlers.UpdateChallengeHandler)
 	challengeAdmin.POST("/accounts/:id/delete", handlers.DeleteAccountHandler)
 	challengeAdmin.POST("/accounts/:id/candy", handlers.GiveCandyHandler)

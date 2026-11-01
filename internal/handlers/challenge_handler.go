@@ -190,28 +190,17 @@ func ChallengeIndexHandler(c *gin.Context) {
 }
 
 func CreateChallengeHandler(c *gin.Context) {
-	name := strings.TrimSpace(c.PostForm("challenge_name"))
-	description := strings.TrimSpace(c.PostForm("challenge_description"))
-	pointsStr := strings.TrimSpace(c.PostForm("challenge_points"))
-	flag := strings.TrimSpace(c.PostForm("challenge_flag"))
-
-	if name == "" || description == "" || pointsStr == "" || flag == "" {
+	challenge, err := validateChallengeInput(challengeInput{
+		Name: c.PostForm("challenge_name"), Description: c.PostForm("challenge_description"),
+		Points: c.PostForm("challenge_points"), Flag: c.PostForm("challenge_flag"), Hints: c.PostForm("challenge_hints"),
+	})
+	if err == errChallengeRequired {
 		c.String(400, "All fields are required")
 		return
 	}
-
-	points, err := strconv.Atoi(pointsStr)
-	if err != nil || points < 0 {
+	if err != nil {
 		c.String(400, "Points must be a non-negative integer")
 		return
-	}
-
-	challenge := models.Challenge{
-		Title:       name,
-		Description: description,
-		Points:      points,
-		Flag:        flag,
-		Hints:       strings.TrimSpace(c.PostForm("challenge_hints")),
 	}
 
 	if err := shared.DB.Create(&challenge).Error; err != nil {
@@ -225,7 +214,7 @@ func CreateChallengeHandler(c *gin.Context) {
 		challengeDir := filepath.Join("ctf", "challenges", fmt.Sprintf("%d", challenge.ID))
 		if err := os.MkdirAll(challengeDir, 0o755); err != nil {
 			_ = c.Error(err)
-			c.String(500, "Challenge created but failed to create directory")
+		c.String(500, "Challenge created but failed to create directory")
 			return
 		}
 		dst := filepath.Join(challengeDir, file.Filename)
@@ -236,7 +225,31 @@ func CreateChallengeHandler(c *gin.Context) {
 		}
 	}
 
-	c.String(200, "Challenge '%s' created! (%d pts)", name, points)
+	c.String(200, "Challenge '%s' created! (%d pts)", challenge.Title, challenge.Points)
+}
+
+type challengeInput struct { Name, Description, Points, Flag, Hints string }
+
+var errChallengeRequired = errors.New("challenge field required")
+var errChallengePoints = errors.New("points must be a non-negative integer")
+var errChallengeNegativePoints = errors.New("points must be >= 0")
+
+func validateChallengeInput(input challengeInput) (models.Challenge, error) {
+	name := strings.TrimSpace(input.Name)
+	description := strings.TrimSpace(input.Description)
+	pointsText := strings.TrimSpace(input.Points)
+	flag := strings.TrimSpace(input.Flag)
+	if name == "" || description == "" || pointsText == "" || flag == "" {
+		return models.Challenge{}, errChallengeRequired
+	}
+	points, err := strconv.Atoi(pointsText)
+	if err != nil {
+		return models.Challenge{}, errChallengePoints
+	}
+	if points < 0 {
+		return models.Challenge{}, errChallengeNegativePoints
+	}
+	return models.Challenge{Title: name, Description: description, Points: points, Flag: flag, Hints: strings.TrimSpace(input.Hints)}, nil
 }
 
 // The unique completion and score increment must commit together.
