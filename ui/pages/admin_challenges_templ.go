@@ -282,7 +282,43 @@ func AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Cha
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\" hx-boost=\"false\" enctype=\"multipart/form-data\"><label class=\"admin__field\"><span>files</span><input type=\"file\" name=\"challenge_files\" accept=\"*/*\"></label> <label class=\"admin__field\"><span>name</span><input type=\"text\" name=\"challenge_name\" value=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "\" hx-boost=\"false\" enctype=\"multipart/form-data\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if selected.Attachment != "" {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "<div class=\"admin-current-file\"><span>current file</span><a href=\"/challenges/")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_VarCurrentFileID string
+				templ_7745c5c3_VarCurrentFileID, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatUint(uint64(selected.ID), 10))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_VarCurrentFileID))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "/file\">")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				var templ_7745c5c3_VarCurrentFile string
+				templ_7745c5c3_VarCurrentFile, templ_7745c5c3_Err = templ.JoinStringErrs(selected.Attachment)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_VarCurrentFile))
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "</a></div>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "<label class=\"admin__field\"><span>files</span><input type=\"file\" name=\"challenge_files\" accept=\"*/*\"></label> <label class=\"admin__field\"><span>name</span><input type=\"text\" name=\"challenge_name\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

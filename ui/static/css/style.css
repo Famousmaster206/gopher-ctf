@@ -846,6 +846,25 @@ a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offs
 .challenge-card > .challenge-btn { display: block; text-align: center; }
 
 .admin button:disabled { opacity: .45; cursor: not-allowed; }
+.admin-current-file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 11px 13px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 10px;
+  background: rgba(255,255,255,.04);
+  overflow-wrap: anywhere;
+}
+.admin-current-file span {
+  color: rgba(255,255,255,.6);
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.admin-current-file a { color: inherit; font-weight: 600; }
 
 .challenge-hints { display: grid; gap: 12px; }
 .challenge-hints h3 { margin: 0; }
