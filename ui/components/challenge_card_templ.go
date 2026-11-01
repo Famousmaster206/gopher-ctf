@@ -65,7 +65,7 @@ func ChallengeCard(c models.Challenge, completed bool) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if c.Attachment != "" {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"challenge-attachment\"><a class=\"challenge-attachment__download\" href=\"/challenges/")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"challenge-attachment\"><button class=\"challenge-attachment__download\" type=\"button\" data-download-url=\"/challenges/")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -99,7 +99,7 @@ func ChallengeCard(c models.Challenge, completed bool) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</a></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</button></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

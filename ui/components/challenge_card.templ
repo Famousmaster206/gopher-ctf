@@ -13,7 +13,7 @@ templ ChallengeCard(c models.Challenge, completed bool) {
             <div class="challenge-description"><p>{ c.Description }</p></div>
 		if c.Attachment != "" {
 			<div class="challenge-attachment">
-				<a class="challenge-attachment__download" href={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/file" } data-filename={ c.Attachment } onclick="downloadChallengeFile(event, this)">download { c.Attachment }</a>
+				<button class="challenge-attachment__download" type="button" data-download-url={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/file" } data-filename={ c.Attachment } onclick="downloadChallengeFile(event, this)">download { c.Attachment }</button>
 			</div>
 		}
         if len(c.HintList()) > 0 {

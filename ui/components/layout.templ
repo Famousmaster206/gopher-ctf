@@ -22,7 +22,7 @@ templ Layout(title string) {
             async function downloadChallengeFile(event, element) {
                 event.preventDefault();
                 try {
-                    const response = await fetch(element.href);
+                    const response = await fetch(element.dataset.downloadUrl);
                     if (!response.ok) throw new Error('download failed');
                     const blob = await response.blob();
                     const objectURL = URL.createObjectURL(blob);
@@ -33,8 +33,8 @@ templ Layout(title string) {
                     link.click();
                     link.remove();
                     setTimeout(() => URL.revokeObjectURL(objectURL), 1000);
-                } catch (_) {
-                    window.location.href = element.href;
+                } catch (error) {
+                    console.error('challenge file download failed', error);
                 }
             }
         </script>
