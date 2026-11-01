@@ -12,7 +12,10 @@ templ ChallengeCard(c models.Challenge, completed bool) {
 		<div class="challenge-content">
             <div class="challenge-description"><p>{ c.Description }</p></div>
 		if c.Attachment != "" {
-			<p class="challenge-attachment"><a href={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/file" }>download challenge file</a></p>
+			<div class="challenge-attachment">
+				<span class="challenge-attachment__label">attachment</span>
+				<a class="challenge-attachment__download" download href={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/file" }>download challenge file</a>
+			</div>
 		}
         if len(c.HintList()) > 0 {
             <section class="challenge-hints" aria-label="Free hints">

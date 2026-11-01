@@ -861,8 +861,40 @@ a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offs
 .challenge-content:has(.challenge-hints) { grid-template-columns: minmax(0,1.5fr) minmax(240px,1fr); }
 .challenge-description { min-width: 0; }
 .challenge-description p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.challenge-attachment {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  background: rgba(255,255,255,.04);
+}
+.challenge-attachment__label {
+  color: rgba(255,255,255,.65);
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.challenge-attachment__download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 14px;
+  border: 1px solid rgba(255,255,255,.24);
+  border-radius: 9px;
+  color: inherit;
+  background: rgba(255,255,255,.08);
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.challenge-attachment__download:hover { background: rgba(255,255,255,.14); }
+.challenge-attachment__download:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
 @media (max-width: 700px) {
   .challenge-content:has(.challenge-hints) { grid-template-columns: minmax(0,1fr); }
+  .challenge-attachment { align-items: stretch; flex-direction: column; }
 }
 
 /* Match the simple typography and spacing used on the home page. */

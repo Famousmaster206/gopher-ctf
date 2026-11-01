@@ -106,8 +106,16 @@ func DownloadChallengeFile(c *gin.Context, challengeID uint, filename string) er
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
 		return fmt.Errorf("Google Cloud Storage download failed with status %s", response.Status)
 	}
-	c.Header("Content-Type", response.Header.Get("Content-Type"))
-	c.Header("Content-Disposition", `attachment; filename="`+ChallengeFilename(filename)+`"`)
+	contentType := response.Header.Get("Content-Type")
+	if contentType == "" {
+		contentType = "application/octet-stream"
+	}
+	downloadName := strings.NewReplacer("\"", "", "\r", "", "\n", "").Replace(ChallengeFilename(filename))
+	c.Header("Content-Type", contentType)
+	c.Header("Content-Disposition", `attachment; filename="`+downloadName+`"`)
+	if response.ContentLength >= 0 {
+		c.Header("Content-Length", fmt.Sprintf("%d", response.ContentLength))
+	}
 	_, err = io.Copy(c.Writer, response.Body)
 	return err
 }
