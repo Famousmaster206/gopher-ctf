@@ -23,9 +23,9 @@ templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCom
             <a class="challenge-filter" href={ "/challenges?hide_completed=1&q="+url.QueryEscape(query) } hx-get="/challenges?hide_completed=1" hx-include="#challenge-search-input" hx-target="main" hx-replace-url="true">hide completed</a>
         }
         </div>
-		<div id="challenge-results" class="challenges-grid">
+		<div id="challenge-results" class="challenges-grid" style="display:flex;flex-wrap:wrap;align-items:stretch;gap:24px;width:100%">
 			for _, c := range challenges {
-				<a class="challenge-card" data-completed={ strconv.FormatBool(completed[c.ID]) } href={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-get={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-replace-url="true" hx-target="main">
+				<a class="challenge-card" style="flex:1 1 280px;max-width:420px;min-width:0" data-completed={ strconv.FormatBool(completed[c.ID]) } href={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-get={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-replace-url="true" hx-target="main">
 					<div class="challenge-card-header">
 						<h2 title={ c.Title }>{ c.Title }</h2>
 						<span class="challenge-points" style={ ChallengePointsStyle(c.Points) }>{ strconv.Itoa(int(c.Points)) } pts</span>

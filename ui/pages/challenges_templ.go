@@ -100,12 +100,12 @@ func Challenges(challenges []models.Challenge, completed map[uint]bool, hideComp
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div id=\"challenge-results\" class=\"challenges-grid\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div id=\"challenge-results\" class=\"challenges-grid\" style=\"display:flex;flex-wrap:wrap;align-items:stretch;gap:24px;width:100%\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		for _, c := range challenges {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<a class=\"challenge-card\" data-completed=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<a class=\"challenge-card\" style=\"flex:1 1 280px;max-width:420px;min-width:0\" data-completed=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

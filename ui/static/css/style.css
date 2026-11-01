@@ -509,9 +509,9 @@ div.admin {
 }
 
 .challenges-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  grid-auto-flow: row;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
   gap: 24px;
   padding: 0;
   width: 100%;
@@ -728,7 +728,7 @@ nav.admin-challenge-list a:hover, nav.admin-challenge-list a[aria-current="true"
 .challenge-search input { width: 100%; }
 
 /* Keep completed and unfinished cards identical in size. */
-.challenge-card { height: 224px; min-width: 0; width: 100%; box-sizing: border-box; }
+.challenge-card { height: 224px; min-width: 0; width: auto; flex: 1 1 280px; max-width: 420px; box-sizing: border-box; }
 .challenge-card .challenge-card-header { flex-direction: row; }
 .challenge-card-header h2 {
   min-width: 0;
@@ -740,6 +740,10 @@ nav.admin-challenge-list a:hover, nav.admin-challenge-list a[aria-current="true"
 }
 .challenge-card > .challenge-completed { margin: 0; align-self: flex-start; }
 .challenge-card > .challenge-btn { margin-top: auto; flex-shrink: 0; }
+
+@media (max-width: 700px) {
+  .challenge-card { flex-basis: 100%; max-width: 100%; }
+}
 
 /* Let toolbar rows grow naturally; never squeeze controls into the cards. */
 .challenges-container {
