@@ -59,7 +59,7 @@ templ AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Ch
    if selected!=nil {
     <h3>{ selected.Title }</h3>
     <form class="admin__form" onsubmit="const search = document.querySelector('#admin-challenge-sidebar input[name=q]'); if (search) { const destination = new URL(this.action); destination.searchParams.set('q', search.value); this.action = destination.toString(); }" method="post" action={ "/admin/challenges/"+strconv.FormatUint(uint64(selected.ID),10)+"?q="+url.QueryEscape(query) } hx-boost="false" enctype="multipart/form-data">
-     <label class="admin__field"><span>files</span><input type="file" name="challenge_files" accept=".tar, .tar.gz, application/x-tar, application/gzip"/></label>
+     <label class="admin__field"><span>files</span><input type="file" name="challenge_files" accept="*/*"/></label>
      <label class="admin__field"><span>name</span><input type="text" name="challenge_name" value={ selected.Title } required/></label>
      <label class="admin__field"><span>description</span><textarea name="challenge_description" rows="6" required>{ selected.Description }</textarea></label>
      <label class="admin__field"><span>points</span><input type="number" name="challenge_points" min="0" step="1" value={ strconv.Itoa(selected.Points) } required/></label>
