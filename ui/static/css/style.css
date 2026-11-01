@@ -885,10 +885,10 @@ a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offs
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 14px 16px;
-  border: 1px solid rgba(255,255,255,.14);
-  border-radius: 12px;
-  background: rgba(255,255,255,.04);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 .challenge-attachment__label {
   color: rgba(255,255,255,.65);
@@ -912,10 +912,16 @@ a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offs
 }
 .challenge-attachment__form { margin: 0; }
 .challenge-content:has(.challenge-hints) .challenge-attachment { grid-column: 1; align-self: start; }
+.challenge-content:has(.challenge-hints) .challenge-description { grid-column: 1; grid-row: 1; }
+.challenge-content:has(.challenge-hints) .challenge-attachment { grid-column: 1; grid-row: 2; }
+.challenge-content:has(.challenge-hints) .challenge-hints { grid-column: 2; grid-row: 1 / span 2; align-self: start; }
 .challenge-attachment__download:hover { background: rgba(255,255,255,.14); }
 .challenge-attachment__download:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
 @media (max-width: 700px) {
   .challenge-content:has(.challenge-hints) { grid-template-columns: minmax(0,1fr); }
+  .challenge-content:has(.challenge-hints) .challenge-description,
+  .challenge-content:has(.challenge-hints) .challenge-attachment,
+  .challenge-content:has(.challenge-hints) .challenge-hints { grid-column: 1; grid-row: auto; }
   .challenge-attachment { align-items: stretch; flex-direction: column; }
 }
 
