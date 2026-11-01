@@ -2,8 +2,11 @@ package handlers
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"net/url"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -110,6 +113,20 @@ func UpdateChallengeHandler(c *gin.Context) {
 	if result.RowsAffected == 0 {
 		c.String(404, "challenge not found")
 		return
+	}
+	if file, fileErr := c.FormFile("challenge_files"); fileErr == nil {
+		challengeDir := filepath.Join("ctf", "challenges", strconv.FormatUint(id, 10))
+		if err := os.MkdirAll(challengeDir, 0o755); err != nil {
+			_ = c.Error(err)
+			c.String(500, "Challenge updated but failed to create directory")
+			return
+		}
+		destination := filepath.Join(challengeDir, filepath.Base(file.Filename))
+		if err := c.SaveUploadedFile(file, destination); err != nil {
+			_ = c.Error(err)
+			c.String(500, "Challenge updated but failed to save file")
+			return
+		}
 	}
 	destination := "/admin/challenges?saved=1&id=" + strconv.FormatUint(id, 10)
 	if query := strings.TrimSpace(c.Query("q")); query != "" {
