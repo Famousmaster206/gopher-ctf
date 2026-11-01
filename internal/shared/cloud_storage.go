@@ -40,6 +40,7 @@ func UploadChallengeFile(c *gin.Context, challengeID uint, file *multipart.FileH
 		return errors.New("missing challenge file")
 	}
 	bucket := strings.TrimSpace(os.Getenv("GCS_BUCKET"))
+	bucket = strings.TrimSuffix(strings.TrimPrefix(bucket, "gs://"), "/")
 	credentialsJSON := os.Getenv("GCS_CREDENTIALS_JSON")
 	if bucket == "" || strings.TrimSpace(credentialsJSON) == "" {
 		return errors.New("Google Cloud Storage is not configured")
@@ -172,7 +173,8 @@ func uploadStorageObject(ctx context.Context, token, bucket, objectName string, 
 	}
 	defer response.Body.Close()
 	if response.StatusCode < 200 || response.StatusCode >= 300 {
-		return fmt.Errorf("Google Cloud Storage upload failed with status %s", response.Status)
+		detail, _ := io.ReadAll(io.LimitReader(response.Body, 4096))
+		return fmt.Errorf("Google Cloud Storage upload failed with status %s: %s", response.Status, strings.TrimSpace(string(detail)))
 	}
 	return nil
 }
