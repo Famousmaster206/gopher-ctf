@@ -62,12 +62,54 @@ func UploadChallengeFile(c *gin.Context, challengeID uint, file *multipart.FileH
 		return err
 	}
 
-	name := filepath.Base(strings.ReplaceAll(file.Filename, "\\", "/"))
+	name := ChallengeFilename(file.Filename)
 	if name == "." || name == "" {
 		return errors.New("invalid challenge filename")
 	}
 	objectName := fmt.Sprintf("challenges/%d/%s", challengeID, name)
 	return uploadStorageObject(c.Request.Context(), token, bucket, objectName, file)
+}
+
+func ChallengeFilename(filename string) string {
+	return filepath.Base(strings.ReplaceAll(filename, "\\", "/"))
+}
+
+func DownloadChallengeFile(c *gin.Context, challengeID uint, filename string) error {
+	bucket := strings.TrimSuffix(strings.TrimPrefix(strings.TrimSpace(os.Getenv("GCS_BUCKET")), "gs://"), "/")
+	credentialsJSON := os.Getenv("GCS_CREDENTIALS_JSON")
+	if bucket == "" || strings.TrimSpace(credentialsJSON) == "" {
+		return errors.New("Google Cloud Storage is not configured")
+	}
+	var credentials serviceAccountCredentials
+	if err := json.Unmarshal([]byte(credentialsJSON), &credentials); err != nil {
+		return errors.New("invalid Google Cloud Storage credentials")
+	}
+	if credentials.TokenURI == "" {
+		credentials.TokenURI = "https://oauth2.googleapis.com/token"
+	}
+	token, err := storageAccessToken(c.Request.Context(), credentials)
+	if err != nil {
+		return err
+	}
+	objectName := fmt.Sprintf("challenges/%d/%s", challengeID, ChallengeFilename(filename))
+	endpoint := "https://storage.googleapis.com/storage/v1/b/" + url.PathEscape(bucket) + "/o/" + url.PathEscape(objectName) + "?alt=media"
+	request, err := http.NewRequestWithContext(c.Request.Context(), http.MethodGet, endpoint, nil)
+	if err != nil {
+		return err
+	}
+	request.Header.Set("Authorization", "Bearer "+token)
+	response, err := http.DefaultClient.Do(request)
+	if err != nil {
+		return err
+	}
+	defer response.Body.Close()
+	if response.StatusCode < 200 || response.StatusCode >= 300 {
+		return fmt.Errorf("Google Cloud Storage download failed with status %s", response.Status)
+	}
+	c.Header("Content-Type", response.Header.Get("Content-Type"))
+	c.Header("Content-Disposition", `attachment; filename="`+ChallengeFilename(filename)+`"`)
+	_, err = io.Copy(c.Writer, response.Body)
+	return err
 }
 
 func storageAccessToken(ctx context.Context, credentials serviceAccountCredentials) (string, error) {

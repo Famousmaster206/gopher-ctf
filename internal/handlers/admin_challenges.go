@@ -117,6 +117,11 @@ func UpdateChallengeHandler(c *gin.Context) {
 			c.String(500, "Challenge updated but failed to save file")
 			return
 		}
+		if err := shared.DB.Model(&challenge).Update("attachment", shared.ChallengeFilename(file.Filename)).Error; err != nil {
+			_ = c.Error(err)
+			c.String(500, "Challenge updated but failed to save file metadata")
+			return
+		}
 	}
 	destination := "/admin/challenges?saved=1&id=" + strconv.FormatUint(id, 10)
 	if query := strings.TrimSpace(c.Query("q")); query != "" {

@@ -64,6 +64,25 @@ func ChallengeCard(c models.Challenge, completed bool) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
+		if c.Attachment != "" {
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<p class=\"challenge-attachment\"><a href=\"/challenges/")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_VarAttachment string
+			templ_7745c5c3_VarAttachment, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.Itoa(int(c.ID)))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_VarAttachment))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "/file\">download challenge file</a></p>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
 		if len(c.HintList()) > 0 {
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<section class=\"challenge-hints\" aria-label=\"Free hints\"><h3>need a hint?</h3><p>hints are free. your points stay the same :D</p>")
 			if templ_7745c5c3_Err != nil {

@@ -11,6 +11,9 @@ templ ChallengeCard(c models.Challenge, completed bool) {
 		<h1>{ c.Title }</h1>
 		<div class="challenge-content">
             <div class="challenge-description"><p>{ c.Description }</p></div>
+		if c.Attachment != "" {
+			<p class="challenge-attachment"><a href={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/file" }>download challenge file</a></p>
+		}
         if len(c.HintList()) > 0 {
             <section class="challenge-hints" aria-label="Free hints">
                 <h3>need a hint?</h3>

@@ -147,6 +147,32 @@ func ChallengeIndividualHandler(c *gin.Context) {
 	}
 }
 
+func DownloadChallengeFileHandler(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil || id == 0 {
+		c.String(400, "Invalid challenge ID")
+		return
+	}
+	var challenge models.Challenge
+	if err := shared.DB.First(&challenge, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			c.String(404, "Challenge not found")
+		} else {
+			_ = c.Error(err)
+			c.String(500, "Database error")
+		}
+		return
+	}
+	if challenge.Attachment == "" {
+		c.String(404, "Challenge file not found")
+		return
+	}
+	if err := shared.DownloadChallengeFile(c, challenge.ID, challenge.Attachment); err != nil {
+		_ = c.Error(err)
+		c.String(500, "Challenge file unavailable")
+	}
+}
+
 func Render(c *gin.Context, status int, cmp templ.Component) {
 	c.Status(status)
 	_ = cmp.Render(c.Request.Context(), c.Writer)
@@ -214,7 +240,15 @@ func CreateChallengeHandler(c *gin.Context) {
 			c.String(500, "Challenge created but failed to save file")
 			return
 		}
+		if err := shared.DB.Model(&challenge).Update("attachment", shared.ChallengeFilename(file.Filename)).Error; err != nil {
+			_ = c.Error(err)
+			c.String(500, "Challenge created but failed to save file metadata")
+			return
+		}
 	}
+
+
+
 
 	c.String(200, "Challenge '%s' created! (%d pts)", challenge.Title, challenge.Points)
 }

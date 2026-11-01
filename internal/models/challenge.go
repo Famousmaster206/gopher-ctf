@@ -12,6 +12,7 @@ type Challenge struct {
 	Points      int
 	Flag        string
 	Hints       string
+	Attachment  string
 }
 
 // Admins enter one optional hint per line; blank lines are ignored.

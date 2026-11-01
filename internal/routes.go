@@ -32,6 +32,7 @@ func RegisterRoutes(router *gin.Engine) {
 	router.POST("/gimme-secret-candy-vault", handlers.AdminLoginHandler)
 	challengeGroup := router.Group("/challenges")
 	challengeGroup.GET("/:id", handlers.ChallengeIndividualHandler)
+	challengeGroup.GET("/:id/file", handlers.DownloadChallengeFileHandler)
 	challengeGroup.POST("/:id/submit", handlers.SubmitFlagHandler)
 	admin := router.Group("/secret-candy-vault")
 	admin.Use(AdminAuth())
