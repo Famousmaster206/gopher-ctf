@@ -48,7 +48,7 @@ func Admin(users []models.User, deleteTokens map[uint]string, candyTokens map[ui
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"admin\"><div class=\"admin__header\"><h2>uhh if ur not supposed to be here please leave, thank you :D</h2><!-- final and strongest defense --><a class=\"admin-nav-button\" href=\"/admin/challenges/new\" hx-boost=\"false\">add challenge</a> <a class=\"admin-nav-button\" href=\"/admin/challenges\" hx-boost=\"false\">view &amp; edit challenges</a></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"admin\"><div class=\"admin__header\"><h2>uhh if ur not supposed to be here please leave, thank you :D</h2><!-- final and strongest defense --><a class=\"admin-nav-button\" href=\"/admin/challenges/new\" hx-boost=\"false\">add challenge</a> <a class=\"admin-nav-button\" href=\"/admin/challenges\" hx-boost=\"false\">view &amp; edit challenges</a> <a class=\"admin-nav-button\" href=\"/admin/challenges/import\" hx-boost=\"false\">bulk import</a></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
