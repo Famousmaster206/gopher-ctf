@@ -3,8 +3,6 @@ package handlers
 import (
 	"errors"
 	"fmt"
-	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -211,14 +209,7 @@ func CreateChallengeHandler(c *gin.Context) {
 
 	file, err := c.FormFile("challenge_files")
 	if err == nil {
-		challengeDir := filepath.Join("ctf", "challenges", fmt.Sprintf("%d", challenge.ID))
-		if err := os.MkdirAll(challengeDir, 0o755); err != nil {
-			_ = c.Error(err)
-		c.String(500, "Challenge created but failed to create directory")
-			return
-		}
-		dst := filepath.Join(challengeDir, file.Filename)
-		if err := c.SaveUploadedFile(file, dst); err != nil {
+		if err := shared.UploadChallengeFile(c, challenge.ID, file); err != nil {
 			_ = c.Error(err)
 			c.String(500, "Challenge created but failed to save file")
 			return
