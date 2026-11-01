@@ -112,7 +112,10 @@ func DownloadChallengeFile(c *gin.Context, challengeID uint, filename string) er
 	}
 	downloadName := strings.NewReplacer("\"", "", "\r", "", "\n", "").Replace(ChallengeFilename(filename))
 	c.Header("Content-Type", contentType)
-	c.Header("Content-Disposition", `attachment; filename="`+downloadName+`"`)
+	c.Header("Content-Disposition", `attachment; filename="`+downloadName+`"; filename*=UTF-8''`+url.PathEscape(downloadName))
+	c.Header("Content-Transfer-Encoding", "binary")
+	c.Header("X-Content-Type-Options", "nosniff")
+	c.Header("Cache-Control", "private, no-store")
 	if response.ContentLength >= 0 {
 		c.Header("Content-Length", fmt.Sprintf("%d", response.ContentLength))
 	}
