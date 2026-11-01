@@ -14,7 +14,9 @@ templ ChallengeCard(c models.Challenge, completed bool) {
 		if c.Attachment != "" {
 			<div class="challenge-attachment">
 				<span class="challenge-attachment__label">attachment</span>
-				<a class="challenge-attachment__download" download href={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/file" }>download challenge file</a>
+				<form class="challenge-attachment__form" action={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/file" } method="get">
+					<button class="challenge-attachment__download" type="submit">download challenge file</button>
+				</form>
 			</div>
 		}
         if len(c.HintList()) > 0 {

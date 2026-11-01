@@ -897,6 +897,7 @@ a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offs
   text-transform: uppercase;
 }
 .challenge-attachment__download {
+  width: auto !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -906,9 +907,10 @@ a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offs
   color: inherit;
   background: rgba(255,255,255,.08);
   font-weight: 600;
-  text-decoration: none;
   white-space: nowrap;
+  cursor: pointer;
 }
+.challenge-attachment__form { margin: 0; }
 .challenge-attachment__download:hover { background: rgba(255,255,255,.14); }
 .challenge-attachment__download:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
 @media (max-width: 700px) {
