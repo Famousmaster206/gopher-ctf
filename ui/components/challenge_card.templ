@@ -13,9 +13,8 @@ templ ChallengeCard(c models.Challenge, completed bool) {
             <div class="challenge-description"><p>{ c.Description }</p></div>
 		if c.Attachment != "" {
 			<div class="challenge-attachment">
-				<span class="challenge-attachment__label">attachment</span>
 				<form class="challenge-attachment__form" action={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/file" } method="get">
-					<button class="challenge-attachment__download" type="submit">download challenge file</button>
+					<button class="challenge-attachment__download" type="submit">download { c.Attachment }</button>
 				</form>
 			</div>
 		}

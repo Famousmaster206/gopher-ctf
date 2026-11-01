@@ -911,6 +911,7 @@ a.challenge-card:focus-visible { outline: 2px solid var(--primary); outline-offs
   cursor: pointer;
 }
 .challenge-attachment__form { margin: 0; }
+.challenge-content:has(.challenge-hints) .challenge-attachment { grid-column: 1; align-self: start; }
 .challenge-attachment__download:hover { background: rgba(255,255,255,.14); }
 .challenge-attachment__download:focus-visible { outline: 2px solid var(--primary); outline-offset: 3px; }
 @media (max-width: 700px) {
