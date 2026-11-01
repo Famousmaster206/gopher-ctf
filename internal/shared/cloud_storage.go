@@ -144,14 +144,16 @@ func uploadStorageObject(ctx context.Context, token, bucket, objectName string, 
 	}
 	metadata, _ := json.Marshal(map[string]string{"name": objectName, "contentType": contentType})
 	boundary := "gopher-ctf-upload"
+	prefix := fmt.Sprintf("--%s\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n%s\r\n--%s\r\nContent-Type: %s\r\nContent-Transfer-Encoding: binary\r\n\r\n", boundary, metadata, boundary, contentType)
+	suffix := fmt.Sprintf("\r\n--%s--\r\n", boundary)
 	reader, writer := io.Pipe()
 	go func() {
-		_, writeErr := fmt.Fprintf(writer, "--%s\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n%s\r\n--%s\r\nContent-Type: %s\r\nContent-Transfer-Encoding: binary\r\n\r\n", boundary, metadata, boundary, contentType)
+		_, writeErr := io.WriteString(writer, prefix)
 		if writeErr == nil {
 			_, writeErr = io.Copy(writer, opened)
 		}
 		if writeErr == nil {
-			_, writeErr = fmt.Fprintf(writer, "\r\n--%s--\r\n", boundary)
+			_, writeErr = io.WriteString(writer, suffix)
 		}
 		_ = writer.CloseWithError(writeErr)
 	}()
@@ -163,6 +165,7 @@ func uploadStorageObject(ctx context.Context, token, bucket, objectName string, 
 	}
 	request.Header.Set("Authorization", "Bearer "+token)
 	request.Header.Set("Content-Type", "multipart/related; boundary="+boundary)
+	request.ContentLength = int64(len(prefix)) + file.Size + int64(len(suffix))
 	response, err := http.DefaultClient.Do(request)
 	if err != nil {
 		return err
