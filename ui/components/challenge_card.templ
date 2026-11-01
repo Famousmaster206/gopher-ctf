@@ -33,7 +33,7 @@ templ ChallengeCard(c models.Challenge, completed bool) {
         <form id="flag-form" class="panel__form">
 			<label class="panel__field">
 				<span>flag</span>
-				<input type="text" name="flag" placeholder="flag{...}" required/>
+				<input type="text" name="flag" placeholder="BASIS{...}" required/>
 			</label>
 			<button type="submit" hx-post={ "/challenges/" + strconv.Itoa(int(c.ID)) + "/submit" } hx-target="#flag-result">Submit</button>
 		</form>

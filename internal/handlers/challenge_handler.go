@@ -160,7 +160,7 @@ func ChallengeIndexHandler(c *gin.Context) {
 	}
 	c.Header("Cache-Control", "private, no-store")
 	var challenges []models.Challenge
-	if err := shared.DB.Find(&challenges).Error; err != nil {
+	if err := shared.DB.Order("points asc").Order("id asc").Find(&challenges).Error; err != nil {
 		_ = c.Error(err)
 		c.String(500, "Database error")
 		return

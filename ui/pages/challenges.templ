@@ -28,7 +28,7 @@ templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCom
 				<a class="challenge-card" data-completed={ strconv.FormatBool(completed[c.ID]) } href={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-get={ "/challenges/" + strconv.Itoa(int(c.ID)) } hx-replace-url="true" hx-target="main">
 					<div class="challenge-card-header">
 						<h2 title={ c.Title }>{ c.Title }</h2>
-						<span class="challenge-points">{ strconv.Itoa(int(c.Points)) } pts</span>
+						<span class="challenge-points" style={ ChallengePointsStyle(c.Points) }>{ strconv.Itoa(int(c.Points)) } pts</span>
 					</div>
 					if completed[c.ID] {
                         <p class="challenge-completed">completed! 🔥</p>

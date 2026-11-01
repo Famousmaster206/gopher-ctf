@@ -121,7 +121,7 @@ func ChallengeCard(c models.Challenge, completed bool) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		if !completed {
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<form id=\"flag-form\" class=\"panel__form\"><label class=\"panel__field\"><span>flag</span> <input type=\"text\" name=\"flag\" placeholder=\"flag{...}\" required></label> <button type=\"submit\" hx-post=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<form id=\"flag-form\" class=\"panel__form\"><label class=\"panel__field\"><span>flag</span> <input type=\"text\" name=\"flag\" placeholder=\"BASIS{...}\" required></label> <button type=\"submit\" hx-post=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

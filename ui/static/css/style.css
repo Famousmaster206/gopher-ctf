@@ -283,6 +283,17 @@ div.admin {
   gap: 14px;
 }
 
+.admin__checkbox {
+ display: flex;
+ align-items: center;
+ gap: 0.5rem;
+}
+
+.admin__checkbox input {
+ width: auto;
+ margin: 0;
+}
+
 .admin__field {
   display: flex;
   flex-direction: column;

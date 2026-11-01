@@ -17,7 +17,7 @@ import (
 func renderAdminChallenges(c *gin.Context, status int, message string, edit *models.Challenge) {
 	c.Header("Cache-Control", "no-store")
 	var challenges []models.Challenge
-	if err := shared.DB.Order("id asc").Find(&challenges).Error; err != nil {
+	if err := shared.DB.Order("points asc").Order("id asc").Find(&challenges).Error; err != nil {
 		_ = c.Error(err)
 		c.String(500, "couldn't load the challenges. try again")
 		return

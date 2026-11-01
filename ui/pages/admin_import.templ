@@ -14,8 +14,8 @@ templ AdminImport() {
     <div class="admin__card-header"><h3>Import JSON</h3></div>
     <form class="admin__form" method="post" action="/admin/challenges/import" hx-post="/admin/challenges/import" hx-encoding="multipart/form-data" hx-target="#upload-result" enctype="multipart/form-data">
      <label class="admin__field"><span>JSON file</span><input type="file" name="import_file" accept=".json,application/json" required/></label>
-     <label class="admin__field"><span><input type="checkbox" name="dry_run"/> dry run</span></label>
-     <label class="admin__field"><span><input type="checkbox" name="update_existing"/> update existing challenges with the same name</span></label>
+     <label class="admin__checkbox"><input type="checkbox" name="dry_run"/> <span>dry run</span></label>
+     <label class="admin__checkbox"><input type="checkbox" name="update_existing"/> <span>update existing challenges with the same name</span></label>
      <button type="submit">Import challenges</button>
     </form>
     <div id="upload-result" class="admin__result"></div>
