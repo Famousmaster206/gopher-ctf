@@ -1,8 +1,9 @@
 package models
 
 import (
-	"gorm.io/gorm"
 	"strings"
+
+	"gorm.io/gorm"
 )
 
 type Challenge struct {
@@ -13,6 +14,7 @@ type Challenge struct {
 	Flag        string
 	Hints       string
 	Attachment  string
+	Fixed       bool `gorm:"not null;default:false"`
 }
 
 // Admins enter one optional hint per line; blank lines are ignored.

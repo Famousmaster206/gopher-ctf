@@ -69,6 +69,7 @@ templ AdminChallengeWorkspace(challenges []models.Challenge, selected *models.Ch
      <label class="admin__field"><span>flag (include header)</span><input type="text" name="challenge_flag" value={ selected.Flag } required/></label>
      <label class="admin__field"><span>hints (optional, one per line)</span><textarea name="challenge_hints" rows="4">{ selected.Hints }</textarea></label>
      <p class="admin__hint">players can open hints for free. no points lost.</p>
+     <label class="admin__checkbox"><input type="checkbox" name="challenge_fixed" value="true" checked?={ selected.Fixed }/><span>mark this challenge as fixed</span></label>
      <button type="submit">save challenge</button>
     </form>
    } else {

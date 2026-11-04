@@ -32,6 +32,8 @@ templ Challenges(challenges []models.Challenge, completed map[uint]bool, hideCom
 					</div>
 					if completed[c.ID] {
                         <p class="challenge-completed">completed! 🔥</p>
+                    } else if c.Fixed {
+                        <p class="challenge-fixed">fixed! 😁</p>
                     }
                     <span class="challenge-btn">View Challenge</span>
 				</a>

@@ -203,6 +203,12 @@ func Challenges(challenges []models.Challenge, completed map[uint]bool, hideComp
 					return templ_7745c5c3_Err
 				}
 			}
+			if !completed[c.ID] && c.Fixed {
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<p class=\"challenge-fixed\">fixed! 😁</p>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "<span class=\"challenge-btn\">View Challenge</span></a> ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err

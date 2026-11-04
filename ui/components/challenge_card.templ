@@ -32,6 +32,8 @@ templ ChallengeCard(c models.Challenge, completed bool) {
 		<div id="challenge-status">
             if completed {
                 <p class="challenge-completed">completed! 🔥</p>
+            } else if c.Fixed {
+                <p class="challenge-fixed">fixed! 😁</p>
             }
         </div>
         if !completed {

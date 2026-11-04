@@ -53,3 +53,28 @@ func TestFreeHints(t *testing.T) {
 		t.Fatal("empty hints must not create an empty section")
 	}
 }
+
+func TestFixedBannerOnlyWhenNotCompleted(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		completed bool
+		want      string
+	}{
+		{name: "fixed", want: "fixed! 😁"},
+		{name: "completed takes precedence", completed: true, want: "completed!"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			var html bytes.Buffer
+			challenge := models.Challenge{Fixed: true}
+			if err := ChallengeCard(challenge, tc.completed).Render(context.Background(), &html); err != nil {
+				t.Fatal(err)
+			}
+			if !strings.Contains(html.String(), tc.want) {
+				t.Fatalf("expected %q banner", tc.want)
+			}
+			if tc.completed && strings.Contains(html.String(), "fixed! 😁") {
+				t.Fatal("fixed banner must not replace the completed banner")
+			}
+		})
+	}
+}

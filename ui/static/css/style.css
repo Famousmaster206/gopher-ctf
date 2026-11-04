@@ -679,6 +679,16 @@ main:has(div.signup) {
   font-weight: bold;
 }
 
+.challenge-fixed {
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid rgba(90, 170, 255, .55);
+  border-radius: 10px;
+  background: rgba(45, 125, 230, .18);
+  color: #9dccff;
+  font-weight: bold;
+}
+
 .challenge-card[data-completed="true"] {
   border-color: #64dc8c;
   box-shadow: 0 0 0 1px rgba(100, 220, 140, .3), 0 0 24px rgba(60, 220, 120, .3);
@@ -735,7 +745,8 @@ nav.admin-challenge-list a:hover, nav.admin-challenge-list a[aria-current="true"
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
-.challenge-card > .challenge-completed { margin: 0; align-self: flex-start; }
+.challenge-card > .challenge-completed,
+.challenge-card > .challenge-fixed { margin: 0; align-self: flex-start; }
 .challenge-card > .challenge-btn { margin-top: auto; flex-shrink: 0; }
 
 /* Let toolbar rows grow naturally; never squeeze controls into the cards. */
