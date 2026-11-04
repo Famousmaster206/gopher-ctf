@@ -17,9 +17,12 @@ func InitDB() *gorm.DB {
 		log.Panicln("DATABASE_URL environment variable not set")
 	}
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN: dsn,
+		// AutoMigrate changes table result types; don't keep cached SELECT * plans.
+		PreferSimpleProtocol: true,
+	}), &gorm.Config{
 		SkipDefaultTransaction: true,
-		PrepareStmt:            true,
 	})
 	if err != nil {
 		log.Panicln(err)
