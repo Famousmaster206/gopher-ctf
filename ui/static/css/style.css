@@ -312,6 +312,39 @@ div.admin {
   width: 100%;
 }
 
+.admin .admin__checkbox {
+  align-self: flex-start;
+  width: auto;
+  max-width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .035);
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+}
+.admin .admin__checkbox:hover {
+  border-color: rgba(100, 170, 255, .5);
+  background: rgba(70, 140, 230, .08);
+}
+.admin .admin__checkbox:has(input:checked) {
+  border-color: rgba(88, 166, 255, .6);
+  background: rgba(70, 140, 230, .13);
+}
+.admin .admin__checkbox input {
+  flex: 0 0 auto;
+  width: auto;
+  accent-color: #58a6ff;
+}
+.admin .admin__checkbox span {
+  color: #dceaff;
+  font-size: 14px;
+  letter-spacing: normal;
+  line-height: 1.35;
+  opacity: 1;
+  text-transform: none;
+}
+
 .admin input::placeholder {
   opacity: 0.45;
 }
